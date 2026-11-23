@@ -2416,6 +2416,13 @@
     })();
 
     /* splash ab splash.html ma chhe */
+    window.addEventListener('load', () => {
+      if (document.fonts) {
+        ['400','600','700','800'].forEach(w => {
+          try { document.fonts.load(`${w} 16px "Noto Sans Gujarati"`, 'ગુજરાતી'); } catch (e) {}
+        });
+      }
+    });
   </script>
 </body>
 </html>

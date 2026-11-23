@@ -3,6 +3,7 @@ package com.phcpransli.labreport;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
+import android.content.ClipData;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.net.Uri;
@@ -107,22 +108,25 @@ public class MainActivity extends Activity {
                 File f = new File(dir, safe);
                 try (FileOutputStream fos = new FileOutputStream(f)) {
                     fos.write(data);
+                    fos.flush();
+                    fos.getFD().sync();
                 }
+                if (f.length() == 0) throw new Exception("PDF is empty");
                 Uri uri = FileProvider.getUriForFile(MainActivity.this,
                         "com.phcpransli.labreport.fileprovider", f);
 
                 String[] pkgs = {"com.whatsapp", "com.whatsapp.w4b"};
                 boolean started = false;
                 for (String pkg : pkgs) {
-                    Intent i = new Intent(Intent.ACTION_SEND);
-                    i.setType("application/pdf");
-                    i.putExtra(Intent.EXTRA_STREAM, uri);
-                    i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    i.setPackage(pkg);
-                    if (phone != null && !phone.isEmpty()) {
-                        i.putExtra("jid", phone + "@s.whatsapp.net");
-                    }
                     try {
+                        // WhatsApp ne file vachvani permission pehla thi j apvi (cold start ma pan attach thase)
+                        grantUriPermission(pkg, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        Intent i = new Intent(Intent.ACTION_SEND);
+                        i.setType("application/pdf");
+                        i.putExtra(Intent.EXTRA_STREAM, uri);
+                        i.setClipData(ClipData.newRawUri("Lab Report", uri));
+                        i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        i.setPackage(pkg);
                         startActivity(i);
                         started = true;
                         break;
