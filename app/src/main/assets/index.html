@@ -1,0 +1,2421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script>
+    /* Android (APK/ફોન): પહેલાં જેવું જ પેજ સેટઅપ (જેમાં પ્રિન્ટ બરાબર ચાલતી હતી). PC/લેપટોપ: સ્ક્રીન મુજબ ફીટ. */
+    (function () {
+      var android = /Android/i.test(navigator.userAgent);
+      if (android) document.documentElement.className += ' droid';
+      document.write('<meta name="viewport" content="' + (android
+        ? 'width=1024, initial-scale=0.5, user-scalable=yes'
+        : 'width=device-width, initial-scale=1, user-scalable=yes') + '">');
+    })();
+  </script>
+  <title id="docTitle">Lab Report - PHC Pransli</title>
+  <!-- Google Fonts for Perfect Rendering -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@600;700&family=Noto+Sans+Gujarati:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <!-- Library to generate PDF directly in browser -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --primary-dark: #0f172a;
+      --primary-accent: #2563eb;
+      --border: #cbd5e1;
+      --bg-light: #f8fafc;
+      --text-dark: #1e293b;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    html, body {
+      background-color: #cbd5e1;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100vh;
+      color: var(--text-dark);
+      overflow-x: auto !important;
+      overflow-y: auto !important;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .main-wrapper {
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .toolbar {
+      width: 794px;
+      margin-top: 15px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .btn {
+      background-color: #2563eb;
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: background-color 0.2s ease-in-out;
+    }
+
+    .btn:hover {
+      background-color: #1d4ed8;
+    }
+
+    .btn-save {
+      background-color: #0d9488;
+    }
+
+    .btn-save:hover {
+      background-color: #0f766e;
+    }
+
+    .btn-whatsapp {
+      background-color: #25d366;
+    }
+
+    .btn-whatsapp:hover {
+      background-color: #1da851;
+    }
+
+    .btn-reset {
+      background-color: #dc2626;
+    }
+
+    .btn-reset:hover {
+      background-color: #b91c1c;
+    }
+
+    .report-container {
+      background: #ffffff;
+      width: 794px;
+      min-height: 1123px;
+      padding: 20px 25px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .report-content {
+      flex: 1 0 auto;
+    }
+
+    .header {
+      margin-bottom: 10px;
+      padding: 12px 15px;
+      background: linear-gradient(135deg, #f8fafc 0%, #edf4ff 100%);
+      border: 1px solid #bfdbfe;
+      border-top: 4px solid #0f172a;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
+    }
+
+    .header-content {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .header h1 {
+      margin: 0 0 4px 0;
+      font-family: 'Georgia', 'Times New Roman', serif;
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      color: #0f172a;
+      background: none !important;
+      -webkit-text-fill-color: initial !important;
+      text-transform: uppercase;
+      position: relative;
+      display: inline-block;
+      line-height: 1.15;
+    }
+
+    .header h1::after {
+      content: '';
+      display: block;
+      width: 70px;
+      height: 2px;
+      background: linear-gradient(90deg, #0f172a, #475569);
+      margin: 4px auto 0;
+      border-radius: 2px;
+    }
+
+    .header .subtitle-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(90deg, #e2e8f0 0%, #f1f5f9 100%);
+      border: 1px solid #94a3b8;
+      padding: 2px 12px;
+      border-radius: 20px;
+      margin: 4px 0;
+    }
+
+    .header .subtitle-badge span {
+      font-size: 11px;
+      color: #0f172a;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .header .location-text {
+      margin: 2px 0;
+      font-size: 11.5px;
+      color: #334155;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+
+    .header .contact-info {
+      margin: 2px 0 0 0;
+      font-size: 10px;
+      color: #475569;
+      font-weight: 600;
+      background: #ffffff;
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 12px;
+      border: 1px solid #cbd5e1;
+    }
+
+    .patient-details {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 5px 15px;
+      margin-bottom: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      background: #f1f5f9;
+      padding: 6px 12px;
+      border: 1.5px solid #94a3b8;
+      border-radius: 4px;
+    }
+
+    .field-group {
+      display: flex;
+      align-items: center;
+    }
+
+    .field-group.full-width {
+      grid-column: span 2;
+    }
+
+    .field-group label {
+      font-weight: 800;
+      white-space: nowrap;
+      margin-right: 6px;
+      color: #0f172a;
+    }
+
+    .field-group input, 
+    .field-group select {
+      flex: 1;
+      border: none;
+      border-bottom: 1px dotted #475569;
+      padding: 2px 4px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #0f172a;
+      outline: none;
+      background: transparent;
+      min-width: 0;
+    }
+
+    .field-group select {
+      cursor: pointer;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+    }
+
+    .age-sex-group {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      width: 100%;
+    }
+
+    .age-sex-group input#ptAge {
+      width: 6ch;
+      flex: 0 0 auto;
+    }
+
+    .age-sex-group select#ptSex {
+      width: 6ch;
+      flex: 0 0 auto;
+      border-bottom: 1px dotted #475569;
+      padding-left: 2px;
+      padding-right: 2px;
+      text-align: left;
+    }
+
+    .pt-type-group {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      gap: 4px;
+      flex-wrap: nowrap;
+    }
+
+    .pt-type-group select#ptType {
+      width: auto;
+      flex: 0 0 auto;
+      display: inline-block;
+      box-sizing: content-box;
+      border-bottom: 1px dotted #475569;
+    }
+
+    .other-pt-type-wrapper {
+      display: none;
+      align-items: center;
+      font-weight: 700;
+      color: #0f172a;
+      margin-left: 2px;
+    }
+
+    .other-pt-type-wrapper input {
+      border: none;
+      border-bottom: 1px dotted #475569;
+      padding: 0 2px;
+      width: 50px;
+      min-width: 30px;
+      font-size: 13px;
+      font-weight: 700;
+      box-sizing: content-box;
+    }
+
+    .field-group input.pt-name-input {
+      font-size: 14.5px !important;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+    }
+
+    .report-mode-wrap { margin-left: auto; flex: 0 0 auto; display: inline-flex; align-items: center; gap: 8px; }
+    .drive-chk-label { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 700; color: #0f172a; cursor: pointer; white-space: nowrap; user-select: none; }
+    .drive-chk-label input { width: 15px; height: 15px; margin: 0; cursor: pointer; }
+    .drive-light { display: none; width: 12px; height: 12px; border-radius: 50%; flex: 0 0 12px; border: 1px solid rgba(0,0,0,.35); background: #dc2626; box-shadow: 0 0 6px 2px rgba(220,38,38,.65); transition: background .25s, box-shadow .25s; }
+    .drive-light.show { display: inline-block; }
+    .drive-light.green { background: #16a34a; box-shadow: 0 0 6px 2px rgba(22,163,74,.7); }
+    @media print { .no-print-ctl, .drive-light { display: none !important; } }
+    .report-mode-select {
+      flex: 0 0 auto;
+      width: auto;
+      border: 1px solid #94a3b8 !important;
+      border-radius: 4px;
+      background: #ffffff;
+      padding: 1px 4px !important;
+      font-size: 12px !important;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .id-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px dotted #475569;
+    }
+
+    .id-prefix {
+      font-weight: 800;
+      color: #1e293b;
+      user-select: none;
+      padding-left: 3px;
+    }
+
+    .id-wrapper input {
+      border-bottom: none !important;
+      padding-left: 2px;
+    }
+
+    .results-table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid #94a3b8;
+      table-layout: fixed;
+    }
+
+    .results-table th, 
+    .results-table td {
+      border: 1px solid #cbd5e1;
+      padding: 3px 6px;
+      font-size: 13px;
+      text-align: left;
+      vertical-align: middle;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+
+    .results-table th {
+      background: #1e3a8a;
+      color: #ffffff;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+      padding: 5px 6px;
+      display: table-cell;
+    }
+
+    .category-header-row td {
+      background-color: #e2e8f0 !important;
+      color: #1e3a8a;
+      font-weight: 800;
+      font-size: 14px !important;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      padding: 6px 6px;
+      text-align: center !important;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .test-name {
+      font-weight: 700;
+      font-size: 13.5px;
+      color: #0f172a;
+    }
+
+    .sub-param .test-name {
+      padding-left: 15px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    .blood-sugar-select {
+      border: none;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #0f172a;
+      background-color: transparent;
+      cursor: pointer;
+      outline: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      padding: 0;
+      margin: 0;
+      width: auto;
+      display: inline-block;
+      box-sizing: content-box;
+    }
+
+    .results-table td textarea.result-input {
+      width: 100%;
+      border: none;
+      outline: none;
+      font-size: 13px;
+      background: transparent;
+      padding: 1px 0;
+      font-weight: 600;
+      color: #0f172a;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      box-sizing: border-box;
+      resize: none;
+      overflow: hidden;
+      height: 20px;
+      min-height: 20px;
+      line-height: 1.2;
+      display: block;
+    }
+
+    .results-table td textarea.abnormal-val {
+      font-weight: 800 !important;
+      color: #dc2626 !important;
+    }
+
+    .norm-range {
+      white-space: pre-line;
+      color: #334155;
+      font-size: 12px;
+      line-height: 1.15;
+    }
+
+    .norm-range-small {
+      font-size: 10.5px !important;
+      line-height: 1.1;
+    }
+
+    .toggle-arrow {
+      cursor: pointer;
+      font-size: 12px;
+      user-select: none;
+      margin-left: 4px;
+      color: #2563eb;
+      display: inline-block;
+      transition: transform 0.2s ease;
+    }
+
+    .toggle-arrow.collapsed {
+      transform: rotate(-90deg);
+    }
+
+    .footer-section {
+      margin-top: 15px;
+      padding-top: 5px;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .signature-section {
+      display: flex;
+      justify-content: flex-end;
+      padding-right: 15px;
+    }
+
+    .signature-box {
+      text-align: center;
+      width: 220px;
+      padding-top: 60px;
+    }
+
+    .signature-line {
+      border-top: 1px solid #0f172a;
+      padding-top: 4px;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .hiv-consent-page {
+      display: none;
+      page-break-before: always;
+      margin-top: 20px;
+      padding-top: 15px;
+      border-top: 2px dashed #cbd5e1;
+    }
+
+    .hiv-consent-header {
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .hiv-consent-header h2 {
+      font-size: 21px;
+      color: #1e3a8a;
+      margin: 0 0 6px 0;
+      font-weight: 800;
+    }
+
+    .hiv-consent-body {
+      font-size: 14.5px;
+      line-height: 1.6;
+      color: #1e293b;
+    }
+
+    .hiv-consent-body h4 {
+      margin: 16px 0 6px 0;
+      font-size: 16px;
+      color: #0f172a;
+      font-weight: 800;
+    }
+
+    .hiv-sign-block {
+      margin-top: 14px;
+      margin-bottom: 20px;
+      line-height: 2.2;
+      font-size: 15px;
+    }
+
+    .hiv-notes-list {
+      font-size: 12.5px;
+      color: #334155;
+      padding-left: 20px;
+      line-height: 1.5;
+    }
+
+    .hiv-notes-list li {
+      margin-bottom: 6px;
+    }
+
+    #printPages { display: none; }
+
+    .pg {
+      width: 210mm;
+      height: 296mm;
+      padding: 9mm 11mm 0 11mm;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+    .pg-body {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow: hidden;
+    }
+    .pg-footer {
+      flex: 0 0 auto;
+      height: 24mm;
+      padding-bottom: 9mm;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .pg-footer .pg-num {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: #475569;
+    }
+    .pg-footer .signature-box { padding-top: 0; }
+    .pg .patient-details { margin-bottom: 8px; }
+    .pg .hiv-consent-page {
+      display: block !important;
+      page-break-before: auto;
+      break-before: auto;
+      margin: 0;
+      padding-top: 6px;
+      border-top: 0;
+    }
+    .pg.pg-consent { padding-bottom: 11mm; }
+    .pg .hiv-consent-page, .pg .hiv-consent-page * {
+      font-family: 'Noto Sans Gujarati', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .pg .hiv-consent-header { margin-bottom: calc(var(--f, 14) * 1px); }
+    .pg .hiv-consent-header h2 { font-size: calc((var(--f, 14) + 6) * 1px); line-height: calc((var(--lh, 22) + 8) * 1px); margin: 0 0 4px 0; }
+    .pg .hiv-consent-header div { font-size: calc(var(--f, 14) * 1px) !important; line-height: calc(var(--lh, 22) * 1px); }
+    .pg .hiv-consent-body { font-size: calc(var(--f, 14) * 1px); line-height: calc(var(--lh, 22) * 1px); }
+    .pg .hiv-consent-body p { line-height: calc(var(--lh, 22) * 1px); }
+    .pg .hiv-consent-body h4 { margin: calc(var(--f, 14) * 1px) 0 6px 0; font-size: calc((var(--f, 14) + 1) * 1px); line-height: calc((var(--lh, 22) + 2) * 1px); }
+    .pg .hiv-sign-block { margin-top: calc(var(--f, 14) * 1px); margin-bottom: calc(var(--f, 14) * 1px); font-size: calc(var(--f, 14) * 1px); line-height: calc((var(--lh, 22) + 10) * 1px); }
+    .pg .hiv-notes-list { font-size: calc((var(--f, 14) - 2) * 1px); line-height: calc((var(--lh, 22) - 4) * 1px); }
+    .pg .hiv-notes-list li { margin-bottom: 4px; line-height: calc((var(--lh, 22) - 4) * 1px); }
+    .pg .sig-dots {
+      display: inline-block;
+      width: 280px;
+      height: 14px;
+      border-bottom: 1px dotted #0f172a;
+      vertical-align: -1px;
+    }
+
+    .hide-row {
+      display: none !important;
+    }
+
+    @page {
+      size: A4 portrait;
+      margin: 0;
+    }
+
+    @media print {
+      html, body {
+        background: #ffffff !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: auto !important;
+        height: auto !important;
+        min-height: 0 !important;
+        overflow: visible !important;
+      }
+      .main-wrapper { display: none !important; }
+      #printPages { display: block !important; }
+      #printPages, #printPages * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      .pg {
+        page-break-after: always;
+        break-after: page;
+      }
+      .pg:last-child {
+        page-break-after: auto;
+        break-after: auto;
+      }
+      .results-table tr {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+    }
+  
+    
+
+    /* ===== 3D light buttons with shining text ===== */
+    .toolbar .btn, .toolbar .btn-reset, .toolbar .btn-whatsapp, .toolbar .btn-save, .toolbar .btn[style] {
+      position:relative; overflow:hidden; cursor:pointer;
+      background:linear-gradient(180deg,#ffffff 0%,#e3f0ff 55%,#c9e0fb 100%) !important;
+      color:#0b3d91 !important; border:1px solid #9fc2ec !important; border-radius:10px;
+      font-family:'Inter','Segoe UI',Tahoma,sans-serif !important; font-size:13.5px !important; font-weight:800 !important; letter-spacing:.3px;
+      padding:9px 18px; text-shadow:0 1px 0 #fff, 0 0 8px rgba(255,255,255,.95), 0 0 14px rgba(96,165,250,.55);
+      box-shadow:0 4px 0 #88abd8, 0 8px 14px rgba(30,64,120,.25), inset 0 1px 0 #fff; transform:translateY(0);
+      transition:transform .12s ease, box-shadow .12s ease, filter .2s ease;
+    }
+    .toolbar .btn::after { content:''; position:absolute; top:0; left:-70%; width:45%; height:100%; pointer-events:none;
+      background:linear-gradient(100deg,transparent,rgba(255,255,255,.85),transparent); transform:skewX(-20deg); animation:btnShine 4.5s ease-in-out infinite; }
+    @keyframes btnShine { 0%,70% { left:-70%; } 100% { left:130%; } }
+    .toolbar .btn:hover { filter:brightness(1.04); transform:translateY(-1px); box-shadow:0 5px 0 #88abd8, 0 12px 18px rgba(30,64,120,.28), inset 0 1px 0 #fff; }
+    .toolbar .btn:active { transform:translateY(3px); box-shadow:0 1px 0 #88abd8, 0 3px 6px rgba(30,64,120,.25), inset 0 1px 0 #fff; }
+
+    /* ===== 3D depth for the on-screen report (print/PDF pages are unaffected) ===== */
+    html, body { background:linear-gradient(160deg,#d6e4f2 0%,#eef4fa 60%,#e2ecf7 100%) !important; background-attachment:fixed; }
+    .report-container { border-radius:6px;
+      box-shadow:0 1px 2px rgba(15,40,80,.25), 0 8px 18px rgba(15,40,80,.16), 0 26px 50px rgba(15,40,80,.20),
+                 6px 6px 0 -1px #fff, 7px 7px 0 0 #cbd8e8, 12px 12px 0 -1px #fff, 13px 13px 0 0 #b8c9de; }
+    .report-container .header { box-shadow:0 6px 14px rgba(15,40,80,.18), inset 0 1px 0 rgba(255,255,255,.95), inset 0 -2px 0 rgba(15,40,80,.07); position:relative; }
+    .report-container .patient-details { box-shadow:0 4px 10px rgba(15,40,80,.12), inset 0 1px 0 #fff; }
+    .report-container .results-table { box-shadow:0 8px 18px rgba(15,40,80,.15); }
+    .report-container .results-table th { background-image:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,0) 55%,rgba(0,0,0,.14)); text-shadow:0 1px 1px rgba(0,0,0,.35); }
+    .report-container .category-header-row td { box-shadow:inset 0 1px 0 #fff, inset 0 -2px 3px rgba(15,40,80,.10); }
+    .report-container .signature-line { text-shadow:0 1px 0 #fff; }
+      /* ===== Start credit message ===== */
+    #creditSplash { position:fixed; inset:0; z-index:10000; display:flex; align-items:center; justify-content:center; background:#f1f5f9; cursor:pointer; transition:opacity .6s ease; }
+    #creditSplash.hide { opacity:0; pointer-events:none; }
+    #creditSplash .credit-box { display:flex; flex-direction:column; align-items:center; text-align:center; gap:clamp(6px,2vw,14px); width:100%; padding:0 4vw; opacity:0; animation:creditIn .9s ease .1s forwards; font-family:Georgia,'Times New Roman',serif; }
+    #creditSplash .credit-syringe { width:min(88vw,380px); max-width:none; height:auto; transform:scaleX(-1); }
+    #creditSplash .credit-pct { font-family:'Segoe UI',Tahoma,sans-serif; font-size:clamp(14px,4.2vw,18px); color:#475569; letter-spacing:.4px; margin-bottom:4px; }
+    #creditSplash .credit-pct b { color:#b91c1c; font-size:clamp(16px,4.8vw,22px); }
+    #creditSplash .credit-tag { font-size:clamp(16px,4.8vw,22px); font-style:italic; color:#64748b; letter-spacing:.3px; }
+    #creditSplash .credit-by { font-size:clamp(20px,5.8vw,28px); font-weight:700; color:#0f172a; letter-spacing:.8px; }
+    #creditSplash .credit-by b { color:#b91c1c; }
+    #creditSplash .credit-line { width:clamp(64px,16vw,90px); height:2px; background:linear-gradient(90deg,transparent,#b91c1c,transparent); margin:2px 0; }
+    .droid .main-wrapper { min-width: 830px; }
+    .droid #creditSplash .credit-syringe { width:88vw; }
+    .droid #creditSplash .credit-pct { font-size:4vw; }
+    .droid #creditSplash .credit-pct b { font-size:4.6vw; }
+    .droid #creditSplash .credit-tag { font-size:4.6vw; }
+    .droid #creditSplash .credit-by { font-size:5.6vw; }
+    .droid #creditSplash .credit-line { width:12vw; }
+    .droid #creditSplash .credit-box { gap:1.6vw; }
+    @keyframes creditIn { to { opacity:1; } }
+    @media print { #creditSplash { display:none !important; } }
+  </style>
+</head>
+<body>
+
+
+  <div class="main-wrapper">
+    <form id="labReportForm" class="report-container" onkeydown="return event.key != 'Enter' || event.target.tagName === 'TEXTAREA';">
+      <div class="report-content">
+        <!-- Section 1: Title Header Block -->
+        <div class="header">
+          <div class="header-content">
+            <h1>Primary Health Centre - Pransli</h1>
+            <div class="subtitle-badge">
+              <span>Mukhyamantri Nidan Yojana</span>
+            </div>
+            <div class="location-text">Taluka: Sutrapada, Dist: Gir Somnath</div>
+            <p class="contact-info">Email: phcprasali.health.junagadh@gmail.com</p>
+          </div>
+        </div>
+
+        <!-- Section 2: Patient Information Grid Block -->
+        <div class="patient-details">
+          <div class="field-group full-width">
+            <label for="ptName">Name of Pt:</label>
+            <input type="text" id="ptName" class="resettable pt-name-input" placeholder="Enter patient name">
+          </div>
+
+          <div class="field-group">
+            <label for="ptAge">Age/Sex:</label>
+            <div class="age-sex-group">
+              <input type="text" id="ptAge" class="resettable" placeholder="25 Yrs" oninput="autoSizeAgeSex()">
+              <select id="ptSex" class="resettable-select" onchange="autoSizeAgeSex()">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-group">
+            <label for="regDate">Reg. Date:</label>
+            <input type="text" id="regDate" placeholder="DD-MM-YYYY">
+          </div>
+
+          <div class="field-group">
+            <label for="ptAddress">Address:</label>
+            <input type="text" id="ptAddress" class="resettable" placeholder="City / Village">
+          </div>
+          <div class="field-group">
+            <label for="regTime">Reg. Time:</label>
+            <input type="time" id="regTime">
+          </div>
+
+          <div class="field-group">
+            <label for="ptContact">Contact No.:</label>
+            <input type="text" id="ptContact" class="resettable" placeholder="e.g. 9876543210">
+          </div>
+          <div class="field-group">
+            <label for="ptIdSuffix">Pt. ID. No:</label>
+            <div class="id-wrapper">
+              <span class="id-prefix">GU/PRSN/</span>
+              <input type="text" id="ptIdSuffix" class="resettable" placeholder="1234">
+            </div>
+          </div>
+          <div class="field-group">
+            <label for="refDoctor">Ref. by Dr.:</label>
+            <input type="text" id="refDoctor" class="resettable">
+          </div>
+          <div class="field-group">
+            <label for="ptType">Type of Pt:</label>
+            <div class="pt-type-group">
+              <select id="ptType" class="resettable-select" onchange="handlePtTypeChange(this)">
+                <option value="General Pt.">General Pt.</option>
+                <option value="General Pediatric">General Pediatric</option>
+                <option value="ANC">ANC</option>
+                <option value="PNC">PNC</option>
+                <option value="RNTCP">RNTCP</option>
+                <option value="Other">Other</option>
+              </select>
+              <span id="otherPtTypeWrapper" class="other-pt-type-wrapper">
+                (&nbsp;<input type="text" id="otherPtTypeInput" class="resettable" placeholder="Specify..." oninput="adjustOtherInputWidth(this)">&nbsp;)
+              </span>
+              <span class="no-print-ctl report-mode-wrap">
+                <label class="drive-chk-label" title="The report is uploaded to Google Drive only when this is ticked">
+                  <input type="checkbox" id="driveUploadChk"> Drive
+                </label>
+                <span id="driveLight" class="drive-light" title="Red = not uploaded yet / failed, Green = uploaded to Drive"></span>
+                <select id="reportMode" class="resettable-select report-mode-select" title="Report page layout">
+                  <option value="group">Group</option>
+                  <option value="ungroup">UnGroup</option>
+                </select>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3: Test Results Table Block -->
+        <table class="results-table">
+          <thead>
+            <tr>
+              <th style="width: 6%;">Sr.</th>
+              <th style="width: 42%;">Name Of Test</th>
+              <th style="width: 24%;">Result(s)</th>
+              <th style="width: 28%;">Normal Range</th>
+            </tr>
+          </thead>
+          <tbody id="testTableBody">
+            <!-- Dynamically Populated -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Section 4: Footer -->
+      <div class="footer-section">
+        <div class="signature-section">
+          <div class="signature-box">
+            <div class="signature-line">Signature of Lab Technician</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 5: Dynamic HIV Consent Form Page -->
+      <div id="hivConsentPage" class="hiv-consent-page">
+        <div class="hiv-consent-header">
+          <h2>એચ.આઈ.વી. ટેસ્ટ સંમતિ પત્રક (HIV Test Consent Form)</h2>
+          <div style="font-weight: 700; font-size: 14px;">પ્રાથમિક આરોગ્ય કેન્દ્ર પ્રાસલી | તા: સુત્રાપાડા, જી: ગીર સોમનાથ</div>
+        </div>
+
+        <div class="hiv-consent-body">
+          <h4>કાઉન્સેલરની જવાબદારી:</h4>
+          <p style="margin: 0;">
+            મેં આથી ક્લાયન્ટને એચઆઈવી ટેસ્ટ વિશે તેના પરિણામ પરિસ્થિતિ વિશે માહિતી અને તેના પરિણામ વિશે સુચના કરી છે. 
+            એચઆઈવી સંબંધિત તમામ માહિતી, તેનું પ્રસારણ, તેનો અટકાવ, તેના ટેસ્ટની કાર્યપધ્ધતી, તેની મર્યાદા અને તેના પરિણામનું અર્થઘટન વિશે જાણકારી આપી છે તે ત્યારબાદ ક્લાયન્ટે તેની મરજીથી તપાસની સંમતિ આપી છે. 
+            હું કાઉન્સેલર ખાતરી આપું છું કે સંપરામર્શની માહિતી અને એચઆઈવી ટેસ્ટના પરિણામને તદન ખાનગી રાખીશ.
+          </p>
+          <div class="hiv-sign-block">
+            <div>કાઉન્સેલરનું નામ: <strong id="hivCounselorName">MAHESH B. VADHER</strong></div>
+            <div style="margin-top: 10px;">કાઉન્સેલરની સહી: ............................................</div>
+          </div>
+
+          <h4>ક્લાયન્ટની સંમતિ:</h4>
+          <p style="margin: 0;">
+            આ માહિતીના આધારે હું, જણાવું છું કે એચઆઈવી ટેસ્ટ અને તેના પરિણામની અસરો વિશે મને સંપુર્ણ માહિતી/સલાહ અને સંપરામર્સ આપ્યું છે. 
+            એચઆઈવી સંબંધિત તમામ માહિતી, તેનું પ્રસારણ, તેનો અટકાવ, તેના ટેસ્ટની કાર્યપધ્ધતી, તેની મર્યાદા અને તેના પરિણામના અર્થઘટનની સ્પષ્ટતા જે મને સમજાય છે તે રીતે અપાઈ છે. 
+            હું આ માટે સંમતિ આપું છું, ટેસ્ટ માટે માર્ગદર્શન અને મારા એચઆઈવી અંગેની પરિસ્થિતિ જાણી લેવા સંમતિ આપું છું.
+          </p>
+          <div class="hiv-sign-block">
+            <div>ક્લાયન્ટનું નામ: <strong id="hivClientName" style="text-transform: uppercase;">-</strong></div>
+            <div style="margin-top: 10px;">ક્લાયન્ટની સહી: ............................................</div>
+            <div style="margin-top: 6px;">તારીખ: <span id="hivConsentDate">-</span></div>
+          </div>
+
+          <h4>નોંધ:</h4>
+          <ol class="hiv-notes-list">
+            <li>હોસ્પિટલની અંદર સફળ કાર્યપધ્ધતિની સંમતિ મેળવ્યાની અંદર એચઆઈવી ટેસ્ટની સંમતિ અલગથી લેવી પડે છે.</li>
+            <li>ક્લાયન્ટ કદાચ જો સગીર વયનો હોય તો નાકો (NACO) ની ગાઈડલાઈન મુજબ કાર્યવાહી કરવી.</li>
+            <li>માનસિક બિમારીને કારણે સંમતિ હાલની સ્થિતિને લીધે છે તેનો અંદાજ કાઢે છે. ઉપરાંત, એચઆઈવી ટેસ્ટીંગ અગાઉ વાલીની સંમતિ મેળવવી પડે છે. (જો જરૂર પડે તો તાલીમ પામેલા માનસિક તંદુરસ્તીનાં તજજ્ઞને બતાવવું)</li>
+            <li>માનસિક બીમારીના સંજોગોમાં જે તે વ્યક્તિની તાત્કાલિક પરિસ્થિતિનું સક્ષમ તજજ્ઞ દ્વારા અધતન કરી સંમતિ લઈ શકાય અથવા વાલીની સંમતિ બાદ પરીક્ષણ કરી શકાય. (જો જરૂર લાગે તો સક્ષમ માનસિક આરોગ્યના તજજ્ઞને સંદર્ભ કરી શકાય.)</li>
+            <li>વ્યક્તિના તબીબી ફાયદા માટે અથવા જ્યારે વ્યક્તિ દ્વારા એચઆઈવીનાં પ્રસરણનું ગંભીર જોખમ જણાતું હોય ત્યારે તેના સાથીદારને એચઆઈવી સંબંધિત ગુપ્ત માહિતી (વ્યક્તિનું એચઆઈવી સ્ટેટસ) જણાવી શકાય છે. એચઆઈવી ગ્રસ્ત વ્યક્તિની સારવાર સાથે રહ્યા/સંકળાયેલા આરોગ્ય કાર્યકર/તબીબી ટુકડીને આ માહિતી આપી શકાય. ક્લાયન્ટના જીવનને (આત્મહત્યાનું વલણ) અથવા તેના લગ્નસાથે કે સાથીદારના જીવનને જોખમ હોય ત્યારે પણ આ માહિતીની જાણ અસ્વૈચ્છિક રીતે કરી શકાય.</li>
+          </ol>
+        </div>
+      </div>
+    </form>
+
+    <div class="toolbar">
+      <button type="button" class="btn btn-reset" onclick="resetForm()">Reset to Default</button>
+      <button type="button" class="btn btn-whatsapp" onclick="sendWhatsApp()">Send to WhatsApp</button>
+      <button type="button" class="btn btn-save" onclick="saveDirectPDF()">Save PDF</button>
+      <button type="button" class="btn" id="printReportBtn" onclick="printReport()">Print Report</button>
+    </div>
+  </div>
+
+  <!-- Paginated copy of the report, built by JS for Print / PDF -->
+  <div id="printPages"></div>
+
+  <script>
+    let isUrineExpanded = false;
+    let isDengueExpanded = false;
+    let isAlcExpanded = false;
+    let isTlcExpanded = false;
+    let isRbcExpanded = false;
+    let isKidneyExpanded = false;
+    let isLipidExpanded = false;
+    let isLftExpanded = false;
+
+    // Original adult test data definition reference
+    const defaultTestData = [
+      { category: "HEMATOLOGY" },
+      { sr: "1", id: "hb", name: "Hemoglobin (Hb)", norm: "M: 13.0-17.0 gm%\nF: 11.5-15.5 gm%", type: "range", min: 11.5, max: 17.0, unit: " gm%" },
+      { sr: "2", id: "tlc", name: "Total Leukocyte Count (TLC) <span id='tlcToggleBtn' class='toggle-arrow collapsed' onclick='toggleTlcSubTests(event)'>▼</span>", norm: "4,000-11,000/cu.mm", type: "range", min: 4000, max: 11000, unit: " /cu.mm" },
+      
+      /* TLC Sub-parameters */
+      { sr: "", id: "tlc_gran", isSub: true, isTlcSub: true, name: "• Granulocytes (%)", norm: "40 - 70 %", type: "range", min: 40, max: 70, unit: " %" },
+      { sr: "", id: "tlc_lym", isSub: true, isTlcSub: true, name: "• Lymphocytes (%)", norm: "20 - 45 %", type: "range", min: 20, max: 45, unit: " %" },
+      { sr: "", id: "tlc_mid", isSub: true, isTlcSub: true, name: "• Mid Size Cells (%)", norm: "2 - 8 %", type: "range", min: 2, max: 8, unit: " %" },
+
+      /* Absolute Leukocyte Count (ALC) sub-block */
+      { sr: "3", id: "alc_header", name: "Absolute Leukocyte Count (ALC / DLC) <span id='alcToggleBtn' class='toggle-arrow collapsed' onclick='toggleAlcSubTests(event)'>▼</span>", norm: "", type: "header_only" },
+      { sr: "", id: "alc_anc", isSub: true, isAlcSub: true, name: "• Absolute Neutrophil Count (ANC)", norm: "2,000 - 7,000 /cu.mm", type: "range", min: 2000, max: 7000, unit: " /cu.mm" },
+      { sr: "", id: "alc_alc", isSub: true, isAlcSub: true, name: "• Absolute Lymphocyte Count", norm: "1,000 - 3,000 /cu.mm", type: "range", min: 1000, max: 3000, unit: " /cu.mm" },
+      { sr: "", id: "alc_aec", isSub: true, isAlcSub: true, name: "• Absolute Eosinophil Count", norm: "40 - 500 /cu.mm", type: "range", min: 40, max: 500, unit: " /cu.mm" },
+      { sr: "", id: "alc_amc", isSub: true, isAlcSub: true, name: "• Absolute Monocyte Count", norm: "200 - 800 /cu.mm", type: "range", min: 200, max: 800, unit: " /cu.mm" },
+      { sr: "", id: "alc_abc", isSub: true, isAlcSub: true, name: "• Absolute Basophil Count", norm: "0 - 100 /cu.mm", type: "range", min: 0, max: 100, unit: " /cu.mm" },
+
+      { sr: "5", id: "rbc", name: "RBC Indices <span id='rbcToggleBtn' class='toggle-arrow collapsed' onclick='toggleRbcSubTests(event)'>▼</span>", norm: "M: 4.5 - 5.5 M/cu.mm\nF: 3.8 - 4.8 M/cu.mm", type: "range", min: 3.8, max: 5.5, unit: " M/cu.mm" },
+      
+      /* RBC Sub-parameters */
+      { sr: "", id: "pcv", isSub: true, isRbcSub: true, name: "• Packed Cell Volume (PCV / Hematocrit)", norm: "M: 40 - 50 %\nF: 36 - 46 %", type: "range", min: 36, max: 50, unit: " %" },
+      { sr: "", id: "mcv", isSub: true, isRbcSub: true, name: "• Mean Corpuscular Volume (MCV)", norm: "80 - 100 fL", type: "range", min: 80, max: 100, unit: " fL" },
+      { sr: "", id: "mch", isSub: true, isRbcSub: true, name: "• Mean Corpuscular Hemoglobin (MCH)", norm: "27 - 32 pg", type: "range", min: 27, max: 32, unit: " pg" },
+      { sr: "", id: "mchc", isSub: true, isRbcSub: true, name: "• Mean Corpuscular Hemoglobin Concentration (MCHC)", norm: "32 - 36 g/dL", type: "range", min: 32, max: 36, unit: " g/dL" },
+      { sr: "", id: "rdw", isSub: true, isRbcSub: true, name: "• Red Cell Distribution Width (RDW)", norm: "11.5 - 14.5 %", type: "range", min: 11.5, max: 14.5, unit: " %" },
+      { sr: "", id: "re_count", isSub: true, isRbcSub: true, name: "• Reticulocyte Count", norm: "0.5 - 2.5 %", type: "range", min: 0.5, max: 2.5, unit: " %" },
+
+      { sr: "6", id: "pbf", name: "Peripheral Blood Smear Examination (PBF)", norm: "Normocytic Normochromic", type: "none" },
+
+      { sr: "7", id: "plt", name: "Platelet Count", norm: "1,50,000 - 4,50,000/cu.mm", type: "range", min: 150000, max: 450000, unit: " /cu.mm" },
+      { sr: "8", id: "esr", name: "Erythrocyte Sedimentation Rate (ESR)", norm: "M: 0-10 mm/1hr\nF: 0-15 mm/1hr", type: "range", min: 0, max: 15, unit: " mm/1hr" },
+      { sr: "9", id: "bt", name: "Bleeding Time (BT)", norm: "2 - 7 mins", type: "time_range", min: 2, max: 7, unit: " mins" },
+      { sr: "10", id: "ct", name: "Clotting Time (CT)", norm: "3 - 10 mins", type: "time_range", min: 3, max: 10, unit: " mins" },
+      { sr: "11", id: "bg", name: "Blood Group & Rh Typing", norm: "-", type: "none" },
+      { sr: "12", id: "sickle", name: "Sickle Cell Screening Test", norm: "Negative", type: "qualitative", normalVal: "negative" },
+      { sr: "13", id: "thal", name: "Thalassemia Screening Test", norm: "Negative", type: "qualitative", normalVal: "negative" },
+
+      { category: "SEROLOGY & IMMUNOLOGY" },
+      { sr: "14", id: "malaria", name: "Malaria Parasite (MP) Detection", norm: "Negative", type: "qualitative", normalVal: "negative" },
+      
+      /* Dengue Serology with Dropdown */
+      { sr: "15", id: "dengue_header", name: "Dengue Serology <span id='dengueToggleBtn' class='toggle-arrow collapsed' onclick='toggleDengueSubTests(event)'>▼</span>", norm: "", type: "header_only" },
+      { sr: "", id: "dengue_ns1", isSub: true, isDengueSub: true, name: "• Dengue NS1 Antigen", norm: "Negative", type: "qualitative", normalVal: "negative" },
+      { sr: "", id: "dengue_igm", isSub: true, isDengueSub: true, name: "• Dengue IgM Antibody", norm: "Negative", type: "qualitative", normalVal: "negative" },
+      { sr: "", id: "dengue_igg", isSub: true, isDengueSub: true, name: "• Dengue IgG Antibody", norm: "Negative", type: "qualitative", normalVal: "negative" },
+
+      { sr: "16", id: "hiv", key: "hiv", name: "HIV Antibody Test <span style='font-size: 11.5px; font-weight: 600; color: #475569; margin-left: 6px;'>(PID: <input type='text' id='hivPidInput' class='resettable' placeholder='' style='border: none; border-bottom: 1px dotted #475569; background: transparent; font-size: 11.5px; font-weight: 700; width: 60px; outline: none;' oninput='adjustHivPidWidth(this)'>)</span>", norm: "Non-Reactive", type: "qualitative", normalVal: "non-reactive" },
+      { sr: "17", id: "hcv", name: "Hepatitis C Virus (HCV Antibody)", norm: "Negative", type: "qualitative", normalVal: "negative" },
+      { sr: "18", id: "widal", name: "Widal Agglutination Test", norm: "Negative", type: "qualitative", normalVal: "negative" },
+      { sr: "19", id: "vdrl", name: "VDRL / RPR Test", norm: "Negative", type: "qualitative", normalVal: "negative" },
+      { sr: "20", id: "hbsag", name: "HBsAg (Hepatitis B Surface Antigen)", norm: "Negative", type: "qualitative", normalVal: "negative" },
+
+      { category: "BIOCHEMISTRY" },
+      { sr: "21", id: "sugar", key: "bloodSugar", name: "Blood Glucose (<select id='bloodSugarType' class='resettable-select blood-sugar-select' onchange='adjustSugarSelectWidth(this)'><option value='RBS'>RBS</option><option value='FBS'>FBS</option><option value='PP2BS'>PP2BS</option></select>)", norm: "FBS: 70-99 mg/dl\nRBS: 80-140 mg/dl\nPP2BS: < 140 mg/dl", type: "range", min: 70, max: 140, unit: " mg/dl" },
+      { sr: "22", id: "gtt", name: "Oral Glucose Tolerance Test (OGTT)", norm: "Fasting: < 92 mg/dl\n1 Hr: < 180 mg/dl\n2 Hr: < 153 mg/dl", type: "range", min: 70, max: 140, unit: " mg/dl" },
+      { sr: "23", id: "hba1c", name: "Glycated Hemoglobin (HbA1c)", norm: "Normal: 4.0 - 5.6%\nPrediabetes: 5.7 - 6.4%\nDiabetes: >= 6.5%", type: "range", min: 4.0, max: 5.6, unit: "%" },
+
+      /* Renal Function Test (RFT) Block */
+      { sr: "24", id: "kidney_header", name: "Renal Function Test (RFT / KFT) <span id='kidneyToggleBtn' class='toggle-arrow collapsed' onclick='toggleKidneySubTests(event)'>▼</span>", norm: "", type: "header_only" },
+      { sr: "", id: "b_urea", isSub: true, isKidneySub: true, name: "• Blood Urea", norm: "15 - 45 mg/dl", type: "range", min: 15, max: 45, unit: " mg/dl" },
+      { sr: "", id: "s_creat", isSub: true, isKidneySub: true, name: "• Serum Creatinine", norm: "0.6 - 1.2 mg/dl", type: "range", min: 0.6, max: 1.2, unit: " mg/dl" },
+      { sr: "", id: "u_acid", isSub: true, isKidneySub: true, name: "• Serum Uric Acid", norm: "M: 3.5 - 7.2 mg/dl\nF: 2.4 - 5.7 mg/dl", type: "range", min: 2.4, max: 7.2, unit: " mg/dl" },
+      { sr: "", id: "s_sodium", isSub: true, isKidneySub: true, name: "• Serum Sodium (Na+)", norm: "135 - 145 mEq/L", type: "range", min: 135, max: 145, unit: " mEq/L" },
+      { sr: "", id: "s_potassium", isSub: true, isKidneySub: true, name: "• Serum Potassium (K+)", norm: "3.5 - 5.0 mEq/L", type: "range", min: 3.5, max: 5.0, unit: " mEq/L" },
+      { sr: "", id: "s_calcium", isSub: true, isKidneySub: true, name: "• Serum Calcium (Ca2+)", norm: "8.5 - 10.5 mg/dl", type: "range", min: 8.5, max: 10.5, unit: " mg/dl" },
+
+      /* Lipid Profile Block */
+      { sr: "25", id: "lipid_header", name: "Lipid Profile <span id='lipidToggleBtn' class='toggle-arrow collapsed' onclick='toggleLipidSubTests(event)'>▼</span>", norm: "", type: "header_only" },
+      { sr: "", id: "l_chol", isSub: true, isLipidSub: true, name: "• Serum Total Cholesterol", norm: "< 200 mg/dl", type: "range", min: 0, max: 200, unit: " mg/dl" },
+      { sr: "", id: "l_trig", isSub: true, isLipidSub: true, name: "• Serum Triglycerides", norm: "< 150 mg/dl", type: "range", min: 0, max: 150, unit: " mg/dl" },
+      { sr: "", id: "l_hdl", isSub: true, isLipidSub: true, name: "• HDL Cholesterol", norm: "> 40 mg/dl", type: "range", min: 40, max: 100, unit: " mg/dl" },
+      { sr: "", id: "l_ldl", isSub: true, isLipidSub: true, name: "• LDL Cholesterol", norm: "< 100 mg/dl", type: "range", min: 0, max: 100, unit: " mg/dl" },
+      { sr: "", id: "l_vldl", isSub: true, isLipidSub: true, name: "• VLDL Cholesterol", norm: "< 30 mg/dl", type: "range", min: 0, max: 30, unit: " mg/dl" },
+      { sr: "", id: "l_ratio", isSub: true, isLipidSub: true, name: "• Total Cholesterol / HDL Ratio", norm: "3.3 - 4.5", type: "range", min: 3.3, max: 4.5, unit: "" },
+
+      /* Liver Function Test (LFT) Block */
+      { sr: "26", id: "lft_header", name: "Liver Function Test (LFT) <span id='lftToggleBtn' class='toggle-arrow collapsed' onclick='toggleLftSubTests(event)'>▼</span>", norm: "", type: "header_only" },
+      { sr: "", id: "lft_bili_tot", isSub: true, isLftSub: true, name: "• Serum Bilirubin (Total)", norm: "0.2 - 1.2 mg/dl", type: "range", min: 0.2, max: 1.2, unit: " mg/dl" },
+      { sr: "", id: "lft_bili_dir", isSub: true, isLftSub: true, name: "• Serum Bilirubin (Direct)", norm: "0.0 - 0.3 mg/dl", type: "range", min: 0.0, max: 0.3, unit: " mg/dl" },
+      { sr: "", id: "lft_bili_ind", isSub: true, isLftSub: true, name: "• Serum Bilirubin (Indirect)", norm: "0.2 - 0.8 mg/dl", type: "range", min: 0.2, max: 0.8, unit: " mg/dl" },
+      { sr: "", id: "lft_sgot", isSub: true, isLftSub: true, name: "• SGOT / AST", norm: "10 - 40 U/L", type: "range", min: 10, max: 40, unit: " U/L" },
+      { sr: "", id: "lft_sgpt", isSub: true, isLftSub: true, name: "• SGPT / ALT", norm: "7 - 56 U/L", type: "range", min: 7, max: 56, unit: " U/L" },
+      { sr: "", id: "lft_alp", isSub: true, isLftSub: true, name: "• Alkaline Phosphatase (ALP)", norm: "44 - 147 U/L", type: "range", min: 44, max: 147, unit: " U/L" },
+      { sr: "", id: "lft_tot_prot", isSub: true, isLftSub: true, name: "• Serum Total Protein", norm: "6.0 - 8.3 g/dl", type: "range", min: 6.0, max: 8.3, unit: " g/dl" },
+      { sr: "", id: "lft_alb", isSub: true, isLftSub: true, name: "• Serum Albumin", norm: "3.5 - 5.0 g/dl", type: "range", min: 3.5, max: 5.0, unit: " g/dl" },
+      { sr: "", id: "lft_glob", isSub: true, isLftSub: true, name: "• Serum Globulin", norm: "2.0 - 3.5 g/dl", type: "range", min: 2.0, max: 3.5, unit: " g/dl" },
+      { sr: "", id: "lft_ag_ratio", isSub: true, isLftSub: true, name: "• Albumin / Globulin (A/G) Ratio", norm: "1.0 - 2.1", type: "range", min: 1.0, max: 2.1, unit: "" },
+
+      { category: "MICROBIOLOGY / CYTOLOGY" },
+      { sr: "27", id: "filaria_smear", name: "Blood Smear for Microfilaria", norm: "Negative", type: "qualitative", normalVal: "negative" },
+      { sr: "28", id: "pap", name: "Pap Smear Cytology", norm: "Negative", type: "qualitative", normalVal: "negative" },
+      { sr: "29", id: "sputum", name: "Sputum Examination for AFB", norm: "Negative", type: "qualitative", normalVal: "negative" },
+      { sr: "30", id: "tb_mantoux", name: "Tuberculin Skin Test (Mantoux)", norm: "< 10 mm (Negative)", type: "qualitative", normalVal: "negative" },
+      { sr: "31", id: "smear_rti_sti", name: "Smear for RTI / STI Evaluation", norm: "Negative", type: "qualitative", normalVal: "negative" },
+      { sr: "32", id: "gram_stain", name: "Gram Staining for Clinical Specimen", norm: "Negative", type: "qualitative", normalVal: "negative" },
+      { sr: "33", id: "via_test", name: "Visual Inspection with Acetic Acid (VIA)", norm: "Negative", type: "qualitative", normalVal: "negative" },
+      { sr: "34", id: "usugar", key: "urineSugar", name: "Urine Sugar (Random)", norm: "Nil", type: "qualitative", normalVal: "nil" },
+      { sr: "35", id: "ualb", key: "urineAlbumin", name: "Urine Albumin", norm: "Nil", type: "qualitative", normalVal: "nil" },
+      { sr: "36", id: "upt", name: "Urine Pregnancy Test (UPT)", norm: "-", type: "none" },
+      { sr: "37", id: "u_24h_protein", name: "24-Hour Urinary Protein", norm: "< 150 mg/24 hr", type: "range", min: 0, max: 150, unit: " mg/24 hr" },
+      { sr: "38", id: "u_microalbumin", name: "Urine Microalbumin", norm: "< 30 mg/L", type: "range", min: 0, max: 30, unit: " mg/L" },
+      { sr: "39", id: "u_creatinine", name: "Urine Creatinine", norm: "M: 1000 - 2000 mg/day\nF: 600 - 1600 mg/day", type: "range", min: 600, max: 2000, unit: " mg/day" },
+      { sr: "40", id: "u_acr", isSmallNorm: true, name: "Urine Albumin-to-Creatinine Ratio (ACR)", norm: "Normal: < 30 mg/g\nMicroalbuminuria: 30-300 mg/g\nMacroalbuminuria: > 300 mg/g", type: "range", min: 0, max: 30, unit: " mg/g" },
+      { sr: "41", id: "stool_ova_cyst", name: "Stool Routine Examination (Ova & Cyst)", norm: "Not Seen", type: "qualitative", normalVal: "negative" },
+      { sr: "42", id: "stool_occult_blood", name: "Stool for Occult Blood", norm: "Negative", type: "qualitative", normalVal: "negative" },
+
+      /* Urine Routine & Microscopy */
+      { sr: "43", id: "urine_header", name: "Urine Routine & Microscopy <span id='urineToggleBtn' class='toggle-arrow collapsed' onclick='toggleUrineSubTests(event)'>▼</span>", norm: "", type: "header_only" },
+      { sr: "", id: "u_color", isSub: true, isUrineSub: true, name: "• Urine Color", norm: "Pale Yellow", type: "none" },
+      { sr: "", id: "u_app", isSub: true, isUrineSub: true, name: "• Urine Appearance", norm: "Clear", type: "qualitative", normalVal: "clear" },
+      { sr: "", id: "u_ph", isSub: true, isUrineSub: true, name: "• Urine Reaction (pH)", norm: "4.5 - 8.0", type: "range", min: 4.5, max: 8.0 },
+      { sr: "", id: "u_spgr", isSub: true, isUrineSub: true, name: "• Urine Specific Gravity", norm: "1.003 - 1.030", type: "range", min: 1.003, max: 1.030 },
+      { sr: "", id: "u_prot", isSub: true, isUrineSub: true, name: "• Urine Protein / Albumin", norm: "Nil", type: "qualitative", normalVal: "nil" },
+      { sr: "", id: "u_sug", isSub: true, isUrineSub: true, name: "• Urine Sugar", norm: "Nil", type: "qualitative", normalVal: "nil" },
+      { sr: "", id: "u_pus", isSub: true, isUrineSub: true, name: "• Pus Cells / WBCs", norm: "0 - 5 /HPF", type: "range", min: 0, max: 5, unit: " /HPF" },
+      { sr: "", id: "u_rbc", isSub: true, isUrineSub: true, name: "• Red Blood Cells (RBCs)", norm: "0 - 2 /HPF", type: "range", min: 0, max: 2, unit: " /HPF" },
+      { sr: "", id: "u_epi", isSub: true, isUrineSub: true, name: "• Epithelial Cells", norm: "0 - 5 /HPF", type: "range", min: 0, max: 5, unit: " /HPF" },
+      { sr: "", id: "u_casts", isSub: true, isUrineSub: true, name: "• Casts", norm: "Nil / HPF", type: "qualitative", normalVal: "nil" },
+      { sr: "", id: "u_cryst", isSub: true, isUrineSub: true, name: "• Crystals", norm: "Nil / HPF", type: "smart_unit", unit: " /HPF", normalVal: "nil" },
+      { sr: "", id: "u_cysts", isSub: true, isUrineSub: true, name: "• Parasites / Cysts", norm: "Nil / HPF", type: "smart_unit", unit: " /HPF", normalVal: "nil" },
+      { sr: "", id: "u_bac", isSub: true, isUrineSub: true, name: "• Bacteria", norm: "Absent", type: "qualitative", normalVal: "absent" }
+    ];
+
+    // Pediatric test data (Indian Medical Council / IAP compliant normal ranges for children)
+    const pediatricTestData = [
+      { category: "HEMATOLOGY" },
+      { sr: "1", id: "hb", name: "Hemoglobin (Hb)", norm: "Pediatric (6m-6y): 11.0-14.0 gm%\nPediatric (6-12y): 11.5-15.5 gm%", type: "range", min: 11.0, max: 15.5, unit: " gm%" },
+      { sr: "2", id: "tlc", name: "Total Leukocyte Count (TLC) <span id='tlcToggleBtn' class='toggle-arrow collapsed' onclick='toggleTlcSubTests(event)'>▼</span>", norm: "6,000-17,000/cu.mm", type: "range", min: 6000, max: 17000, unit: " /cu.mm" },
+      
+      { sr: "", id: "tlc_gran", isSub: true, isTlcSub: true, name: "• Granulocytes (%)", norm: "30 - 60 %", type: "range", min: 30, max: 60, unit: " %" },
+      { sr: "", id: "tlc_lym", isSub: true, isTlcSub: true, name: "• Lymphocytes (%)", norm: "30 - 60 %", type: "range", min: 30, max: 60, unit: " %" },
+      { sr: "", id: "tlc_mid", isSub: true, isTlcSub: true, name: "• Mid Size Cells (%)", norm: "2 - 8 %", type: "range", min: 2, max: 8, unit: " %" },
+
+      { sr: "3", id: "alc_header", name: "Absolute Leukocyte Count (ALC / DLC) <span id='alcToggleBtn' class='toggle-arrow collapsed' onclick='toggleAlcSubTests(event)'>▼</span>", norm: "", type: "header_only" },
+      { sr: "", id: "alc_anc", isSub: true, isAlcSub: true, name: "• Absolute Neutrophil Count (ANC)", norm: "1,500 - 8,500 /cu.mm", type: "range", min: 1500, max: 8500, unit: " /cu.mm" },
+      { sr: "", id: "alc_alc", isSub: true, isAlcSub: true, name: "• Absolute Lymphocyte Count", norm: "2,000 - 8,000 /cu.mm", type: "range", min: 2000, max: 8000, unit: " /cu.mm" },
+      { sr: "", id: "alc_aec", isSub: true, isAlcSub: true, name: "• Absolute Eosinophil Count", norm: "40 - 500 /cu.mm", type: "range", min: 40, max: 500, unit: " /cu.mm" },
+      { sr: "", id: "alc_amc", isSub: true, isAlcSub: true, name: "• Absolute Monocyte Count", norm: "200 - 1000 /cu.mm", type: "range", min: 200, max: 1000, unit: " /cu.mm" },
+      { sr: "", id: "alc_abc", isSub: true, isAlcSub: true, name: "• Absolute Basophil Count", norm: "0 - 100 /cu.mm", type: "range", min: 0, max: 100, unit: " /cu.mm" },
+
+      { sr: "5", id: "rbc", name: "RBC Indices <span id='rbcToggleBtn' class='toggle-arrow collapsed' onclick='toggleRbcSubTests(event)'>▼</span>", norm: "3.8 - 5.2 M/cu.mm", type: "range", min: 3.8, max: 5.2, unit: " M/cu.mm" },
+      
+      { sr: "", id: "pcv", isSub: true, isRbcSub: true, name: "• Packed Cell Volume (PCV / Hematocrit)", norm: "35 - 45 %", type: "range", min: 35, max: 45, unit: " %" },
+      { sr: "", id: "mcv", isSub: true, isRbcSub: true, name: "• Mean Corpuscular Volume (MCV)", norm: "75 - 87 fL", type: "range", min: 75, max: 87, unit: " fL" },
+      { sr: "", id: "mch", isSub: true, isRbcSub: true, name: "• Mean Corpuscular Hemoglobin (MCH)", norm: "24 - 30 pg", type: "range", min: 24, max: 30, unit: " pg" },
+      { sr: "", id: "mchc", isSub: true, isRbcSub: true, name: "• Mean Corpuscular Hemoglobin Concentration (MCHC)", norm: "31 - 37 g/dL", type: "range", min: 31, max: 37, unit: " g/dL" },
+      { sr: "", id: "rdw", isSub: true, isRbcSub: true, name: "• Red Cell Distribution Width (RDW)", norm: "11.5 - 15.0 %", type: "range", min: 11.5, max: 15.0, unit: " %" },
+      { sr: "", id: "re_count", isSub: true, isRbcSub: true, name: "• Reticulocyte Count", norm: "0.5 - 2.0 %", type: "range", min: 0.5, max: 2.0, unit: " %" },
+
+      { sr: "6", id: "pbf", name: "Peripheral Blood Smear Examination (PBF)", norm: "Normocytic Normochromic", type: "none" },
+
+      { sr: "7", id: "plt", name: "Platelet Count", norm: "1,50,000 - 4,50,000/cu.mm", type: "range", min: 150000, max: 450000, unit: " /cu.mm" },
+      { sr: "8", id: "esr", name: "Erythrocyte Sedimentation Rate (ESR)", norm: "0 - 10 mm/1hr", type: "range", min: 0, max: 10, unit: " mm/1hr" },
+      { sr: "9", id: "bt", name: "Bleeding Time (BT)", norm: "2 - 7 mins", type: "time_range", min: 2, max: 7, unit: " mins" },
+      { sr: "10", id: "ct", name: "Clotting Time (CT)", norm: "3 - 10 mins", type: "time_range", min: 3, max: 10, unit: " mins" },
+      { sr: "11", id: "bg", name: "Blood Group & Rh Typing", norm: "-", type: "none" },
+      { sr: "12", id: "sickle", name: "Sickle Cell Screening Test", norm: "Negative", type: "qualitative", normalVal: "negative" },
+      { sr: "13", id: "thal", name: "Thalassemia Screening Test", norm: "Negative", type: "qualitative", normalVal: "negative" },
+
+      { category: "SEROLOGY & IMMUNOLOGY" },
+      { sr: "14", id: "malaria", name: "Malaria Parasite (MP) Detection", norm: "Negative", type: "qualitative", normalVal: "negative" },
+      
+      { sr: "15", id: "dengue_header", name: "Dengue Serology <span id='dengueToggleBtn' class='toggle-arrow collapsed' onclick='toggleDengueSubTests(event)'>▼</span>", norm: "", type: "header_only" },
+      { sr: "", id: "dengue_ns1", isSub: true, isDengueSub: true, name: "• Dengue NS1 Antigen", norm: "Negative", type: "qualitative", normalVal: "negative" },
+      { sr: "", id: "dengue_igm", isSub: true, isDengueSub: true, name: "• Dengue IgM Antibody", norm: "Negative", type: "qualitative", normalVal: "negative" },
+      { sr: "", id: "dengue_igg", isSub: true, isDengueSub: true, name: "• Dengue IgG Antibody", norm: "Negative", type: "qualitative", normalVal: "negative" },
+
+      { sr: "16", id: "hiv", key: "hiv", name: "HIV Antibody Test <span style='font-size: 11.5px; font-weight: 600; color: #475569; margin-left: 6px;'>(PID: <input type='text' id='hivPidInput' class='resettable' placeholder='' style='border: none; border-bottom: 1px dotted #475569; background: transparent; font-size: 11.5px; font-weight: 700; width: 60px; outline: none;' oninput='adjustHivPidWidth(this)'>)</span>", norm: "Non-Reactive", type: "qualitative", normalVal: "non-reactive" },
+      { sr: "17", id: "hcv", name: "Hepatitis C Virus (HCV Antibody)", norm: "Negative", type: "qualitative", normalVal: "negative" },
+      { sr: "18", id: "widal", name: "Widal Agglutination Test", norm: "Negative", type: "qualitative", normalVal: "negative" },
+      { sr: "19", id: "vdrl", name: "VDRL / RPR Test", norm: "Negative", type: "qualitative", normalVal: "negative" },
+      { sr: "20", id: "hbsag", name: "HBsAg (Hepatitis B Surface Antigen)", norm: "Negative", type: "qualitative", normalVal: "negative" },
+
+      { category: "BIOCHEMISTRY" },
+      { sr: "21", id: "sugar", key: "bloodSugar", name: "Blood Glucose (<select id='bloodSugarType' class='resettable-select blood-sugar-select' onchange='adjustSugarSelectWidth(this)'><option value='RBS'>RBS</option><option value='FBS'>FBS</option><option value='PP2BS'>PP2BS</option></select>)", norm: "FBS: 60-100 mg/dl\nRBS: 70-140 mg/dl\nPP2BS: < 140 mg/dl", type: "range", min: 60, max: 140, unit: " mg/dl" },
+      { sr: "22", id: "gtt", name: "Oral Glucose Tolerance Test (OGTT)", norm: "Fasting: < 92 mg/dl\n2 Hr: < 140 mg/dl", type: "range", min: 60, max: 140, unit: " mg/dl" },
+      { sr: "23", id: "hba1c", name: "Glycated Hemoglobin (HbA1c)", norm: "Normal: 4.0 - 5.6%", type: "range", min: 4.0, max: 5.6, unit: "%" },
+
+      { sr: "24", id: "kidney_header", name: "Renal Function Test (RFT / KFT) <span id='kidneyToggleBtn' class='toggle-arrow collapsed' onclick='toggleKidneySubTests(event)'>▼</span>", norm: "", type: "header_only" },
+      { sr: "", id: "b_urea", isSub: true, isKidneySub: true, name: "• Blood Urea", norm: "5 - 20 mg/dl", type: "range", min: 5, max: 20, unit: " mg/dl" },
+      { sr: "", id: "s_creat", isSub: true, isKidneySub: true, name: "• Serum Creatinine", norm: "0.2 - 0.7 mg/dl", type: "range", min: 0.2, max: 0.7, unit: " mg/dl" },
+      { sr: "", id: "u_acid", isSub: true, isKidneySub: true, name: "• Serum Uric Acid", norm: "2.0 - 5.5 mg/dl", type: "range", min: 2.0, max: 5.5, unit: " mg/dl" },
+      { sr: "", id: "s_sodium", isSub: true, isKidneySub: true, name: "• Serum Sodium (Na+)", norm: "135 - 145 mEq/L", type: "range", min: 135, max: 145, unit: " mEq/L" },
+      { sr: "", id: "s_potassium", isSub: true, isKidneySub: true, name: "• Serum Potassium (K+)", norm: "3.5 - 5.0 mEq/L", type: "range", min: 3.5, max: 5.0, unit: " mEq/L" },
+      { sr: "", id: "s_calcium", isSub: true, isKidneySub: true, name: "• Serum Calcium (Ca2+)", norm: "8.8 - 10.8 mg/dl", type: "range", min: 8.8, max: 10.8, unit: " mg/dl" },
+
+      { sr: "25", id: "lipid_header", name: "Lipid Profile <span id='lipidToggleBtn' class='toggle-arrow collapsed' onclick='toggleLipidSubTests(event)'>▼</span>", norm: "", type: "header_only" },
+      { sr: "", id: "l_chol", isSub: true, isLipidSub: true, name: "• Serum Total Cholesterol", norm: "< 170 mg/dl", type: "range", min: 0, max: 170, unit: " mg/dl" },
+      { sr: "", id: "l_trig", isSub: true, isLipidSub: true, name: "• Serum Triglycerides", norm: "< 90 mg/dl", type: "range", min: 0, max: 90, unit: " mg/dl" },
+      { sr: "", id: "l_hdl", isSub: true, isLipidSub: true, name: "• HDL Cholesterol", norm: "> 45 mg/dl", type: "range", min: 45, max: 100, unit: " mg/dl" },
+      { sr: "", id: "l_ldl", isSub: true, isLipidSub: true, name: "• LDL Cholesterol", norm: "< 110 mg/dl", type: "range", min: 0, max: 110, unit: " mg/dl" },
+      { sr: "", id: "l_vldl", isSub: true, isLipidSub: true, name: "• VLDL Cholesterol", norm: "< 25 mg/dl", type: "range", min: 0, max: 25, unit: " mg/dl" },
+      { sr: "", id: "l_ratio", isSub: true, isLipidSub: true, name: "• Total Cholesterol / HDL Ratio", norm: "< 3.5", type: "range", min: 0, max: 3.5, unit: "" },
+
+      { sr: "26", id: "lft_header", name: "Liver Function Test (LFT) <span id='lftToggleBtn' class='toggle-arrow collapsed' onclick='toggleLftSubTests(event)'>▼</span>", norm: "", type: "header_only" },
+      { sr: "", id: "lft_bili_tot", isSub: true, isLftSub: true, name: "• Serum Bilirubin (Total)", norm: "0.2 - 1.0 mg/dl", type: "range", min: 0.2, max: 1.0, unit: " mg/dl" },
+      { sr: "", id: "lft_bili_dir", isSub: true, isLftSub: true, name: "• Serum Bilirubin (Direct)", norm: "0.0 - 0.2 mg/dl", type: "range", min: 0.0, max: 0.2, unit: " mg/dl" },
+      { sr: "", id: "lft_bili_ind", isSub: true, isLftSub: true, name: "• Serum Bilirubin (Indirect)", norm: "0.2 - 0.8 mg/dl", type: "range", min: 0.2, max: 0.8, unit: " mg/dl" },
+      { sr: "", id: "lft_sgot", isSub: true, isLftSub: true, name: "• SGOT / AST", norm: "15 - 50 U/L", type: "range", min: 15, max: 50, unit: " U/L" },
+      { sr: "", id: "lft_sgpt", isSub: true, isLftSub: true, name: "• SGPT / ALT", norm: "10 - 45 U/L", type: "range", min: 10, max: 45, unit: " U/L" },
+      { sr: "", id: "lft_alp", isSub: true, isLftSub: true, name: "• Alkaline Phosphatase (ALP)", norm: "100 - 350 U/L", type: "range", min: 100, max: 350, unit: " U/L" },
+      { sr: "", id: "lft_tot_prot", isSub: true, isLftSub: true, name: "• Serum Total Protein", norm: "6.0 - 8.0 g/dl", type: "range", min: 6.0, max: 8.0, unit: " g/dl" },
+      { sr: "", id: "lft_alb", isSub: true, isLftSub: true, name: "• Serum Albumin", norm: "3.5 - 5.0 g/dl", type: "range", min: 3.5, max: 5.0, unit: " g/dl" },
+      { sr: "", id: "lft_glob", isSub: true, isLftSub: true, name: "• Serum Globulin", norm: "2.0 - 3.5 g/dl", type: "range", min: 2.0, max: 3.5, unit: " g/dl" },
+      { sr: "", id: "lft_ag_ratio", isSub: true, isLftSub: true, name: "• Albumin / Globulin (A/G) Ratio", norm: "1.0 - 2.1", type: "range", min: 1.0, max: 2.1, unit: "" },
+
+      { category: "MICROBIOLOGY / CYTOLOGY" },
+      { sr: "27", id: "filaria_smear", name: "Blood Smear for Microfilaria", norm: "Negative", type: "qualitative", normalVal: "negative" },
+      { sr: "28", id: "pap", name: "Pap Smear Cytology", norm: "Negative", type: "qualitative", normalVal: "negative" },
+      { sr: "29", id: "sputum", name: "Sputum Examination for AFB", norm: "Negative", type: "qualitative", normalVal: "negative" },
+      { sr: "30", id: "tb_mantoux", name: "Tuberculin Skin Test (Mantoux)", norm: "< 10 mm (Negative)", type: "qualitative", normalVal: "negative" },
+      { sr: "31", id: "smear_rti_sti", name: "Smear for RTI / STI Evaluation", norm: "Negative", type: "qualitative", normalVal: "negative" },
+      { sr: "32", id: "gram_stain", name: "Gram Staining for Clinical Specimen", norm: "Negative", type: "qualitative", normalVal: "negative" },
+      { sr: "33", id: "via_test", name: "Visual Inspection with Acetic Acid (VIA)", norm: "Negative", type: "qualitative", normalVal: "negative" },
+      { sr: "34", id: "usugar", key: "urineSugar", name: "Urine Sugar (Random)", norm: "Nil", type: "qualitative", normalVal: "nil" },
+      { sr: "35", id: "ualb", key: "urineAlbumin", name: "Urine Albumin", norm: "Nil", type: "qualitative", normalVal: "nil" },
+      { sr: "36", id: "upt", name: "Urine Pregnancy Test (UPT)", norm: "-", type: "none" },
+      { sr: "37", id: "u_24h_protein", name: "24-Hour Urinary Protein", norm: "< 100 mg/24 hr", type: "range", min: 0, max: 100, unit: " mg/24 hr" },
+      { sr: "38", id: "u_microalbumin", name: "Urine Microalbumin", norm: "< 30 mg/L", type: "range", min: 0, max: 30, unit: " mg/L" },
+      { sr: "39", id: "u_creatinine", name: "Urine Creatinine", norm: "Pediatric: 500 - 1200 mg/day", type: "range", min: 500, max: 1200, unit: " mg/day" },
+      { sr: "", id: "u_acr", isSmallNorm: true, name: "Urine Albumin-to-Creatinine Ratio (ACR)", norm: "Normal: < 30 mg/g", type: "range", min: 0, max: 30, unit: " mg/g" },
+      { sr: "41", id: "stool_ova_cyst", name: "Stool Routine Examination (Ova & Cyst)", norm: "Not Seen", type: "qualitative", normalVal: "negative" },
+      { sr: "42", id: "stool_occult_blood", name: "Stool for Occult Blood", norm: "Negative", type: "qualitative", normalVal: "negative" },
+
+      { sr: "43", id: "urine_header", name: "Urine Routine & Microscopy <span id='urineToggleBtn' class='toggle-arrow collapsed' onclick='toggleUrineSubTests(event)'>▼</span>", norm: "", type: "header_only" },
+      { sr: "", id: "u_color", isSub: true, isUrineSub: true, name: "• Urine Color", norm: "Pale Yellow", type: "none" },
+      { sr: "", id: "u_app", isSub: true, isUrineSub: true, name: "• Urine Appearance", norm: "Clear", type: "qualitative", normalVal: "clear" },
+      { sr: "", id: "u_ph", isSub: true, isUrineSub: true, name: "• Urine Reaction (pH)", norm: "4.5 - 8.0", type: "range", min: 4.5, max: 8.0 },
+      { sr: "", id: "u_spgr", isSub: true, isUrineSub: true, name: "• Urine Specific Gravity", norm: "1.002 - 1.030", type: "range", min: 1.002, max: 1.030 },
+      { sr: "", id: "u_prot", isSub: true, isUrineSub: true, name: "• Urine Protein / Albumin", norm: "Nil", type: "qualitative", normalVal: "nil" },
+      { sr: "", id: "u_sug", isSub: true, isUrineSub: true, name: "• Urine Sugar", norm: "Nil", type: "qualitative", normalVal: "nil" },
+      { sr: "", id: "u_pus", isSub: true, isUrineSub: true, name: "• Pus Cells / WBCs", norm: "0 - 5 /HPF", type: "range", min: 0, max: 5, unit: " /HPF" },
+      { sr: "", id: "u_rbc", isSub: true, isUrineSub: true, name: "• Red Blood Cells (RBCs)", norm: "0 - 2 /HPF", type: "range", min: 0, max: 2, unit: " /HPF" },
+      { sr: "", id: "u_epi", isSub: true, isUrineSub: true, name: "• Epithelial Cells", norm: "0 - 5 /HPF", type: "range", min: 0, max: 5, unit: " /HPF" },
+      { sr: "", id: "u_casts", isSub: true, isUrineSub: true, name: "• Casts", norm: "Nil / HPF", type: "qualitative", normalVal: "nil" },
+      { sr: "", id: "u_cryst", isSub: true, isUrineSub: true, name: "• Crystals", norm: "Nil / HPF", type: "smart_unit", unit: " /HPF", normalVal: "nil" },
+      { sr: "", id: "u_cysts", isSub: true, isUrineSub: true, name: "• Parasites / Cysts", norm: "Nil / HPF", type: "smart_unit", unit: " /HPF", normalVal: "nil" },
+      { sr: "", id: "u_bac", isSub: true, isUrineSub: true, name: "• Bacteria", norm: "Absent", type: "qualitative", normalVal: "absent" }
+    ];
+
+    let testData = defaultTestData;
+
+    const ancTestIds = [
+      "hb", "tlc", "tlc_gran", "tlc_lym", "tlc_mid", 
+      "rbc", "pcv", "mcv", "mch", "mchc", "rdw", "re_count",
+      "plt", "bg", "sickle", "thal", 
+      "malaria", "hiv", "vdrl", "hbsag", "sugar", "usugar", "ualb"
+    ];
+
+    function toggleUrineSubTests(e) {
+      if (e) e.stopPropagation();
+      isUrineExpanded = !isUrineExpanded;
+      const btn = document.getElementById('urineToggleBtn');
+      if (btn) {
+        if (isUrineExpanded) btn.classList.remove('collapsed');
+        else btn.classList.add('collapsed');
+      }
+      applyPtTypeFilter();
+    }
+
+    function toggleDengueSubTests(e) {
+      if (e) e.stopPropagation();
+      isDengueExpanded = !isDengueExpanded;
+      const btn = document.getElementById('dengueToggleBtn');
+      if (btn) {
+        if (isDengueExpanded) btn.classList.remove('collapsed');
+        else btn.classList.add('collapsed');
+      }
+      applyPtTypeFilter();
+    }
+
+    function toggleKidneySubTests(e) {
+      if (e) e.stopPropagation();
+      isKidneyExpanded = !isKidneyExpanded;
+      const btn = document.getElementById('kidneyToggleBtn');
+      if (btn) {
+        if (isKidneyExpanded) btn.classList.remove('collapsed');
+        else btn.classList.add('collapsed');
+      }
+      applyPtTypeFilter();
+    }
+
+    function toggleLipidSubTests(e) {
+      if (e) e.stopPropagation();
+      isLipidExpanded = !isLipidExpanded;
+      const btn = document.getElementById('lipidToggleBtn');
+      if (btn) {
+        if (isLipidExpanded) btn.classList.remove('collapsed');
+        else btn.classList.add('collapsed');
+      }
+      applyPtTypeFilter();
+    }
+
+    function toggleLftSubTests(e) {
+      if (e) e.stopPropagation();
+      isLftExpanded = !isLftExpanded;
+      const btn = document.getElementById('lftToggleBtn');
+      if (btn) {
+        if (isLftExpanded) btn.classList.remove('collapsed');
+        else btn.classList.add('collapsed');
+      }
+      applyPtTypeFilter();
+    }
+
+    function toggleAlcSubTests(e) {
+      if (e) e.stopPropagation();
+      isAlcExpanded = !isAlcExpanded;
+      const btn = document.getElementById('alcToggleBtn');
+      if (btn) {
+        if (isAlcExpanded) btn.classList.remove('collapsed');
+        else btn.classList.add('collapsed');
+      }
+      applyPtTypeFilter();
+    }
+
+    function toggleTlcSubTests(e) {
+      if (e) e.stopPropagation();
+      isTlcExpanded = !isTlcExpanded;
+      const btn = document.getElementById('tlcToggleBtn');
+      if (btn) {
+        if (isTlcExpanded) btn.classList.remove('collapsed');
+        else btn.classList.add('collapsed');
+      }
+      applyPtTypeFilter();
+    }
+
+    function toggleRbcSubTests(e) {
+      if (e) e.stopPropagation();
+      isRbcExpanded = !isRbcExpanded;
+      const btn = document.getElementById('rbcToggleBtn');
+      if (btn) {
+        if (isRbcExpanded) btn.classList.remove('collapsed');
+        else btn.classList.add('collapsed');
+      }
+      applyPtTypeFilter();
+    }
+
+    function handlePtTypeChange(selectElement) {
+      toggleOtherPtType(selectElement);
+      updateTestDataByPtType(selectElement.value);
+      applyPtTypeFilter();
+    }
+
+    function updateTestDataByPtType(typeVal) {
+      const tbody = document.getElementById('testTableBody');
+      const savedResults = {};
+      
+      // Save current input values before rebuilding table
+      const existingRows = tbody.querySelectorAll('tr');
+      existingRows.forEach((row, idx) => {
+        const input = row.querySelector('.result-input');
+        if (input && input.value.trim() !== '') {
+          savedResults[idx] = input.value;
+        }
+        const sugarSelect = row.querySelector('#bloodSugarType');
+        if (sugarSelect) {
+          savedResults['bloodSugarType'] = sugarSelect.value;
+        }
+      });
+
+      if (typeVal === 'General Pediatric') {
+        testData = pediatricTestData;
+      } else {
+        testData = defaultTestData;
+      }
+
+      // Rebuild Table Body
+      tbody.innerHTML = '';
+      testData.forEach((item, index) => {
+        const tr = document.createElement('tr');
+        tr.setAttribute('data-row-index', index);
+        if (item.category) {
+          tr.className = 'category-header-row';
+          tr.innerHTML = `<td colspan="4">${item.category}</td>`;
+        } else {
+          if (item.isSub) tr.classList.add('sub-param');
+          
+          let resultCellHTML = `<textarea rows="1" class="resettable result-input" data-index="${index}" placeholder="Enter result..." oninput="autoResizeTextarea(this); autoFitInputText(this);"></textarea>`;
+          if (item.type === "header_only") {
+            resultCellHTML = `-`;
+          }
+
+          const normClass = item.isSmallNorm ? 'norm-range norm-range-small' : 'norm-range';
+
+          tr.innerHTML = `
+            <td class="sr-cell" style="text-align: center;" data-original-sr="${item.sr}">${item.sr}</td>
+            <td class="test-name">${item.name}</td>
+            <td>${resultCellHTML}</td>
+            <td class="${normClass}">${item.norm}</td>
+          `;
+        }
+        tbody.appendChild(tr);
+      });
+
+      // Restore values if any
+      Object.keys(savedResults).forEach(key => {
+        if (key === 'bloodSugarType') {
+          const bsSel = document.getElementById('bloodSugarType');
+          if (bsSel) {
+            bsSel.value = savedResults[key];
+            adjustSugarSelectWidth(bsSel);
+          }
+        } else {
+          const input = tbody.querySelector(`.result-input[data-index="${key}"]`);
+          if (input) {
+            input.value = savedResults[key];
+            autoResizeTextarea(input);
+            autoFitInputText(input);
+            validateResultRange(input, parseInt(key, 10));
+          }
+        }
+      });
+    }
+
+    function toggleOtherPtType(selectElement) {
+      const wrapper = document.getElementById('otherPtTypeWrapper');
+      const input = document.getElementById('otherPtTypeInput');
+      
+      adjustPtTypeSelectWidth(selectElement);
+
+      if (selectElement.value === 'Other') {
+        wrapper.style.display = 'inline-flex';
+        adjustOtherInputWidth(input);
+        input.focus();
+      } else {
+        wrapper.style.display = 'none';
+        input.value = '';
+      }
+    }
+
+    function applyPtTypeFilter() {
+      const selectedType = document.getElementById('ptType').value;
+      const reportMode = document.getElementById('reportMode').value;
+      const rows = tbody.querySelectorAll('tr');
+      
+      let currentCategoryRow = null;
+      let categoryHasVisibleTests = false;
+      let srCounter = 1;
+
+      rows.forEach((row, idx) => {
+        const item = testData[idx];
+        if (row.classList.contains('category-header-row')) {
+          if (currentCategoryRow && !categoryHasVisibleTests) {
+            currentCategoryRow.classList.add('hide-row');
+          }
+          currentCategoryRow = row;
+          categoryHasVisibleTests = false;
+          if (reportMode === 'ungroup') {
+            srCounter = 1;
+          }
+        } else {
+          const srCell = row.querySelector('.sr-cell');
+          let shouldShow = true;
+
+          if (selectedType === 'ANC') {
+            if (!ancTestIds.includes(item.id)) {
+              shouldShow = false;
+            } else {
+              if (item.isTlcSub && !isTlcExpanded) shouldShow = false;
+              if (item.isRbcSub && !isRbcExpanded) shouldShow = false;
+            }
+          } else {
+            if (item.isUrineSub && !isUrineExpanded) shouldShow = false;
+            if (item.isDengueSub && !isDengueExpanded) shouldShow = false;
+            if (item.isKidneySub && !isKidneyExpanded) shouldShow = false;
+            if (item.isLipidSub && !isLipidExpanded) shouldShow = false;
+            if (item.isLftSub && !isLftExpanded) shouldShow = false;
+            if (item.isAlcSub && !isAlcExpanded) shouldShow = false;
+            if (item.isTlcSub && !isTlcExpanded) shouldShow = false;
+            if (item.isRbcSub && !isRbcExpanded) shouldShow = false;
+          }
+
+          if (shouldShow) {
+            row.classList.remove('hide-row');
+            categoryHasVisibleTests = true;
+            if (srCell && !item.isSub) {
+              srCell.textContent = srCounter++;
+            }
+          } else {
+            row.classList.add('hide-row');
+          }
+        }
+      });
+
+      if (currentCategoryRow) {
+        if (!categoryHasVisibleTests) {
+          currentCategoryRow.classList.add('hide-row');
+        } else {
+          currentCategoryRow.classList.remove('hide-row');
+        }
+      }
+    }
+
+    function adjustPtTypeSelectWidth(selectElement) {
+      if (!selectElement) return;
+      const text = selectElement.options[selectElement.selectedIndex].text;
+      const tempSpan = document.createElement('span');
+      tempSpan.style.visibility = 'hidden';
+      tempSpan.style.position = 'absolute';
+      tempSpan.style.whiteSpace = 'nowrap';
+      tempSpan.style.fontFamily = window.getComputedStyle(selectElement).fontFamily;
+      tempSpan.style.fontSize = window.getComputedStyle(selectElement).fontSize;
+      tempSpan.style.fontWeight = window.getComputedStyle(selectElement).fontWeight;
+      tempSpan.textContent = text;
+      document.body.appendChild(tempSpan);
+      selectElement.style.width = (tempSpan.offsetWidth + 2) + 'px';
+      document.body.removeChild(tempSpan);
+    }
+
+    function adjustOtherInputWidth(inputElement) {
+      if (!inputElement) return;
+      const text = inputElement.value || inputElement.placeholder || '';
+      const tempSpan = document.createElement('span');
+      tempSpan.style.visibility = 'hidden';
+      tempSpan.style.position = 'absolute';
+      tempSpan.style.whiteSpace = 'pre';
+      tempSpan.style.fontFamily = window.getComputedStyle(inputElement).fontFamily;
+      tempSpan.style.fontSize = window.getComputedStyle(inputElement).fontSize;
+      tempSpan.style.fontWeight = window.getComputedStyle(inputElement).fontWeight;
+      tempSpan.textContent = text;
+      document.body.appendChild(tempSpan);
+      inputElement.style.width = Math.max(30, tempSpan.offsetWidth + 4) + 'px';
+      document.body.removeChild(tempSpan);
+    }
+
+    function adjustSugarSelectWidth(selectElement) {
+      if (!selectElement) return;
+      const text = selectElement.options[selectElement.selectedIndex].text;
+      const tempSpan = document.createElement('span');
+      tempSpan.style.visibility = 'hidden';
+      tempSpan.style.position = 'absolute';
+      tempSpan.style.whiteSpace = 'nowrap';
+      tempSpan.style.fontFamily = window.getComputedStyle(selectElement).fontFamily;
+      tempSpan.style.fontSize = window.getComputedStyle(selectElement).fontSize;
+      tempSpan.style.fontWeight = window.getComputedStyle(selectElement).fontWeight;
+      tempSpan.textContent = text;
+      document.body.appendChild(tempSpan);
+      selectElement.style.width = tempSpan.offsetWidth + 'px';
+      document.body.removeChild(tempSpan);
+    }
+
+    function adjustHivPidWidth(inputElement) {
+      if (!inputElement) return;
+      const text = inputElement.value || inputElement.placeholder || '';
+      const tempSpan = document.createElement('span');
+      tempSpan.style.visibility = 'hidden';
+      tempSpan.style.position = 'absolute';
+      tempSpan.style.whiteSpace = 'pre';
+      tempSpan.style.fontFamily = window.getComputedStyle(inputElement).fontFamily;
+      tempSpan.style.fontSize = window.getComputedStyle(inputElement).fontSize;
+      tempSpan.style.fontWeight = window.getComputedStyle(inputElement).fontWeight;
+      tempSpan.textContent = text;
+      document.body.appendChild(tempSpan);
+      inputElement.style.width = Math.max(30, tempSpan.offsetWidth + 4) + 'px';
+      document.body.removeChild(tempSpan);
+    }
+
+    function autoResizeTextarea(textarea) {
+      if (!textarea) return;
+      textarea.style.height = 'auto';
+      textarea.style.height = (textarea.scrollHeight) + 'px';
+    }
+
+    function autoFitInputText(input) {
+      if (!input) return;
+      const len = input.value.length;
+      if (len > 30) input.style.fontSize = '11px';
+      else if (len > 20) input.style.fontSize = '12px';
+      else input.style.fontSize = '13px';
+    }
+
+    const tbody = document.getElementById('testTableBody');
+
+    // Initial render
+    updateTestDataByPtType("General Pt.");
+
+    function filterEmptyRowsForPrint() {
+      const rows = tbody.querySelectorAll('tr');
+      const reportMode = document.getElementById('reportMode').value;
+      let currentCategoryRow = null;
+      let categoryHasData = false;
+      let serialNumberCounter = 1;
+
+      let hasUrineSubData = false;
+      let hasDengueSubData = false;
+      let hasKidneySubData = false;
+      let hasLipidSubData = false;
+      let hasLftSubData = false;
+      let hasAlcSubData = false;
+      let hasTlcSubData = false;
+      let hasRbcSubData = false;
+
+      rows.forEach((row, idx) => {
+        const item = testData[idx];
+        if (item) {
+          const input = row.querySelector('.result-input');
+          if (input && input.value.trim() !== '') {
+            if (item.isUrineSub) hasUrineSubData = true;
+            if (item.isDengueSub) hasDengueSubData = true;
+            if (item.isKidneySub) hasKidneySubData = true;
+            if (item.isLipidSub) hasLipidSubData = true;
+            if (item.isLftSub) hasLftSubData = true;
+            if (item.id && item.id.startsWith('alc_')) hasAlcSubData = true;
+            if (item.isTlcSub) hasTlcSubData = true;
+            if (item.isRbcSub) hasRbcSubData = true;
+          }
+        }
+      });
+
+      rows.forEach((row, idx) => {
+        const item = testData[idx];
+        if (row.classList.contains('category-header-row')) {
+          if (currentCategoryRow && !categoryHasData) {
+            currentCategoryRow.classList.add('hide-row');
+          }
+          currentCategoryRow = row;
+          categoryHasData = false;
+          if (reportMode === 'ungroup') {
+            serialNumberCounter = 1;
+          }
+        } else {
+          const input = row.querySelector('.result-input');
+          const srCell = row.querySelector('.sr-cell');
+
+          let showThisRow = false;
+          if (item.id === 'urine_header' && hasUrineSubData) {
+            showThisRow = true;
+          } else if (item.id === 'dengue_header' && hasDengueSubData) {
+            showThisRow = true;
+          } else if (item.id === 'kidney_header' && hasKidneySubData) {
+            showThisRow = true;
+          } else if (item.id === 'lipid_header' && hasLipidSubData) {
+            showThisRow = true;
+          } else if (item.id === 'lft_header' && hasLftSubData) {
+            showThisRow = true;
+          } else if (item.id === 'alc_header' && hasAlcSubData) {
+            showThisRow = true;
+          } else if (item.id === 'tlc') {
+            if ((input && input.value.trim() !== '') || hasTlcSubData) showThisRow = true;
+          } else if (item.id === 'rbc') {
+            if ((input && input.value.trim() !== '') || hasRbcSubData) showThisRow = true;
+          } else if (input && input.value.trim() !== '') {
+            showThisRow = true;
+          }
+
+          if (showThisRow) {
+            row.classList.remove('hide-row');
+            categoryHasData = true;
+            if (srCell && !item.isSub) {
+              srCell.textContent = serialNumberCounter++;
+            }
+          } else {
+            row.classList.add('hide-row');
+          }
+        }
+      });
+
+      if (currentCategoryRow && !categoryHasData) {
+        currentCategoryRow.classList.add('hide-row');
+      }
+    }
+
+    function restoreAllRowsAfterPrint() {
+      applyPtTypeFilter();
+    }
+
+    document.getElementById('ptName').addEventListener('input', (e) => {
+      const ptName = e.target.value.trim();
+      document.title = ptName ? ptName.replace(/\s+/g, '_') : "Lab Report - PHC Pransli";
+      document.getElementById('hivClientName').textContent = ptName || '-';
+    });
+
+    document.getElementById('regDate').addEventListener('input', (e) => {
+      document.getElementById('hivConsentDate').textContent = e.target.value || '-';
+    });
+
+    document.getElementById('reportMode').addEventListener('change', () => {
+      applyPtTypeFilter();
+    });
+
+    function checkHivConsentAutoAttach() {
+      const hivRowIndex = testData.findIndex(item => item.key === 'hiv');
+      if (hivRowIndex !== -1) {
+        const hivInput = document.querySelector(`.result-input[data-index="${hivRowIndex}"]`);
+        const consentBox = document.getElementById('hivConsentPage');
+        
+        if (hivInput && hivInput.value.trim() !== '') {
+          consentBox.style.display = 'block';
+          const ptName = document.getElementById('ptName').value.trim();
+          const regDate = document.getElementById('regDate').value;
+          document.getElementById('hivClientName').textContent = ptName || '-';
+          document.getElementById('hivConsentDate').textContent = regDate || '-';
+        } else {
+          consentBox.style.display = 'none';
+        }
+      }
+    }
+
+    function makeStaticClone() {
+      const clone = document.getElementById('labReportForm').cloneNode(true);
+      const originalInputs = document.querySelectorAll('#labReportForm input, #labReportForm select, #labReportForm textarea');
+      const cloneInputs = clone.querySelectorAll('input, select, textarea');
+
+      originalInputs.forEach((orig, idx) => {
+        const target = cloneInputs[idx];
+        if (!target || !target.parentNode) return;
+        if (orig.id === 'reportMode' || orig.id === 'driveUploadChk') {
+          const w = target.closest('.no-print-ctl') || target;
+          w.remove();
+          return;
+        }
+        if (orig.tagName === 'SELECT') {
+          let val = orig.value || '';
+          if (orig.id === 'ptType' && val === 'Other') {
+            const otherVal = document.getElementById('otherPtTypeInput').value.trim();
+            val = otherVal ? `Other (${otherVal})` : 'Other';
+            const wrapper = target.parentNode.querySelector('#otherPtTypeWrapper');
+            if (wrapper) wrapper.style.display = 'none';
+          }
+          const span = document.createElement('span');
+          span.textContent = val;
+          span.style.fontFamily = 'inherit';
+          span.style.fontSize = orig.classList.contains('blood-sugar-select') ? '13.5px' : '13px';
+          span.style.fontWeight = '700';
+          span.style.color = '#0f172a';
+          target.parentNode.replaceChild(span, target);
+        } else if (orig.type === 'radio' || orig.type === 'checkbox') {
+          target.checked = orig.checked;
+        } else {
+          const span = document.createElement('span');
+          span.textContent = orig.value || '';
+          span.style.fontFamily = 'inherit';
+          span.style.fontSize = orig.style.fontSize || (orig.classList.contains('pt-name-input') ? '14.5px' : '13px');
+          span.style.fontWeight = orig.classList.contains('abnormal-val') ? '800' : '600';
+          span.style.color = orig.classList.contains('abnormal-val') ? '#dc2626' : '#0f172a';
+          span.style.wordBreak = 'break-word';
+          span.style.whiteSpace = 'pre-wrap';
+          if (orig.closest('.patient-details')) {
+            span.style.display = 'inline-block';
+            span.style.flex = '1';
+            span.style.minHeight = '18px';
+            span.style.padding = '2px 4px';
+          }
+          target.parentNode.replaceChild(span, target);
+        }
+      });
+
+      // પ્રિન્ટ/PDF માં Age પછી તરત જ Sex છાપવું (વચ્ચે ખાલી જગ્યા નહિ) અને નીચેની લાઈન નહિ
+      const asg = clone.querySelector('.age-sex-group');
+      if (asg) {
+        const ageV = (document.getElementById('ptAge').value || '').trim();
+        const sexV = document.getElementById('ptSex').value || '';
+        asg.innerHTML = '';
+        const sp = document.createElement('span');
+        sp.textContent = ageV ? ageV + ' / ' + sexV : sexV;
+        sp.style.fontSize = '13px';
+        sp.style.fontWeight = '600';
+        sp.style.color = '#0f172a';
+        sp.style.padding = '2px 4px';
+        sp.style.minHeight = '18px';
+        sp.style.display = 'inline-block';
+        asg.appendChild(sp);
+      }
+      // Patient details ની અંદર ડોટેડ/નીચેની લાઈન દૂર
+      clone.querySelectorAll('.patient-details *').forEach(el => {
+        el.style.borderBottom = 'none';
+        el.style.borderBottomWidth = '0';
+      });
+      return clone;
+    }
+
+    function buildPagedReport(includeConsent = true) {
+      filterEmptyRowsForPrint();
+      const clone = makeStaticClone();
+      restoreAllRowsAfterPrint();
+
+      const header  = clone.querySelector('.header');
+      const details = clone.querySelector('.patient-details');
+      const theadHTML = clone.querySelector('.results-table thead').outerHTML;
+      const rows = Array.from(clone.querySelectorAll('#testTableBody tr'))
+        .filter(r => !r.classList.contains('hide-row'));
+      const consent = clone.querySelector('#hivConsentPage');
+      const showConsent = includeConsent && !!consent && consent.style.display === 'block';
+
+      clone.querySelectorAll('.toggle-arrow').forEach(el => el.remove());
+      clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+
+      const measure = document.createElement('div');
+      measure.style.cssText = 'position:absolute;left:-10000px;top:0;visibility:hidden;width:210mm;';
+      document.body.appendChild(measure);
+
+      const pages = [];
+      function newPage(kind) {
+        const pg = document.createElement('section');
+        pg.className = 'pg';
+        pg.innerHTML = '<div class="pg-body"></div>' + (kind === 'consent' ? '' :
+          '<div class="pg-footer"><span class="pg-num"></span>' +
+          '<div class="signature-box"><div class="signature-line">Signature of Lab Technician</div></div></div>');
+        if (kind === 'consent') pg.classList.add('pg-consent');
+        const body = pg.querySelector('.pg-body');
+        if (kind === 'first') body.appendChild(header.cloneNode(true));
+        if (kind !== 'consent') body.appendChild(details.cloneNode(true));
+        let tbody = null;
+        if (kind === 'consent') {
+          const cc = consent.cloneNode(true);
+          cc.querySelectorAll('.hiv-sign-block div').forEach(d => {
+            Array.from(d.childNodes).forEach(n => {
+              if (n.nodeType === 3 && /\.{5,}/.test(n.nodeValue)) {
+                n.nodeValue = n.nodeValue.replace(/\s*\.{5,}\s*/, ' ');
+                const line = document.createElement('span');
+                line.className = 'sig-dots';
+                d.appendChild(line);
+              }
+            });
+          });
+          body.appendChild(cc);
+        } else {
+          const tbl = document.createElement('table');
+          tbl.className = 'results-table';
+          tbl.innerHTML = theadHTML + '<tbody></tbody>';
+          body.appendChild(tbl);
+          tbody = tbl.querySelector('tbody');
+        }
+        measure.appendChild(pg);
+        const page = { pg, body, tbody };
+        pages.push(page);
+        return page;
+      }
+      const overflows = (p) => p.body.scrollHeight > p.body.clientHeight + 1;
+
+      const keepWithNext = (idx) => {
+        const r = rows[idx], nxt = rows[idx + 1];
+        if (!nxt) return false;
+        if (r.classList.contains('category-header-row')) return true;
+        return !r.classList.contains('sub-param') && nxt.classList.contains('sub-param');
+      };
+
+      const ungroup = document.getElementById('reportMode').value === 'ungroup';
+      let cur = newPage('first');
+      let i = 0;
+      while (i < rows.length) {
+        if (ungroup && rows[i].classList.contains('category-header-row') && cur.tbody.children.length > 0) {
+          cur = newPage('table');
+        }
+        const group = [rows[i]];
+        while (keepWithNext(i + group.length - 1)) group.push(rows[i + group.length]);
+        group.forEach(r => cur.tbody.appendChild(r));
+        if (overflows(cur) && cur.tbody.children.length > group.length) {
+          group.forEach(r => cur.tbody.removeChild(r));
+          cur = newPage('table');
+          group.forEach(r => cur.tbody.appendChild(r));
+        }
+        i += group.length;
+      }
+      if (showConsent) {
+        const cp = newPage('consent');
+        for (let f = 17; f >= 10; f--) {
+          cp.pg.style.setProperty('--f', f);
+          cp.pg.style.setProperty('--lh', Math.round(f * 1.6));
+          if (!overflows(cp)) break;
+        }
+      }
+
+      const wrap = document.createElement('div');
+      wrap.className = 'pg-stack';
+      pages.forEach((p, n) => {
+        const num = p.pg.querySelector('.pg-num');
+        if (num) num.textContent = `Page ${n + 1} of ${pages.length}`;
+        wrap.appendChild(p.pg);
+      });
+      document.body.removeChild(measure);
+      return wrap;
+    }
+
+    function preparePrintPages() {
+      const box = document.getElementById('printPages');
+      box.innerHTML = '';
+      box.appendChild(buildPagedReport());
+    }
+    function clearPrintPages() {
+      document.getElementById('printPages').innerHTML = '';
+    }
+    window.addEventListener('beforeprint', () => {
+      const w = document.querySelector('.main-wrapper');
+      if (w && !document.documentElement.classList.contains('droid')) w.style.zoom = 1;          // પ્રિન્ટ વખતે સ્ક્રીન-ફીટ ઝૂમ બંધ
+      preparePrintPages();
+    });
+    window.addEventListener('afterprint', () => { clearPrintPages(); fitLayout(); });
+
+    function autoSizeAgeSex() {
+      const a = document.getElementById('ptAge');
+      const x = document.getElementById('ptSex');
+      if (a) a.style.width = Math.max(a.value.length, 4) + 1 + 'ch';
+      if (x) x.style.width = (x.options[x.selectedIndex].text.length + 1) + 'ch';
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      autoSizeAgeSex();
+      const c = document.getElementById('driveUploadChk');
+      if (c) c.addEventListener('change', () => refreshDriveLight());
+    });
+
+    /* ===== Google Drive auto-upload =====
+       નીચેની લિંક ની જગ્યાએ તમારી Google Apps Script "Web app" URL મૂકો
+       (Code.gs માં આપેલી સૂચના મુજબ Deploy કર્યા પછી મળશે). */
+    const DRIVE_UPLOAD_URL = 'https://script.google.com/macros/s/AKfycbyIJ70GBVPGkRsNRczAx-E4on05joCmknrfiuN2AMZlUAjdPa71AUM_FBVKNDMf16Y2bw/exec';
+
+    // Drive સ્ટેટસ લાઈટ: લાલ = બાકી/ન થયું, લીલો = અપલોડ થઈ ગયું (માત્ર સ્ક્રીન પર, Drive ટીક હોય ત્યારે જ)
+    function setDriveLight(state) {
+      const l = document.getElementById('driveLight');
+      const c = document.getElementById('driveUploadChk');
+      if (!l) return;
+      l.classList.toggle('show', !!(c && c.checked));
+      l.classList.toggle('green', state === 'green');
+    }
+    function showDriveToast(msg, isError) {
+      if (isError) setDriveLight('red');
+      else if (String(msg).indexOf('✔') !== -1) setDriveLight('green');
+      else setDriveLight('red');
+    }
+
+    async function uploadPdfToDrive(blob, driveName, replaceName) {
+      if (!DRIVE_UPLOAD_URL || DRIVE_UPLOAD_URL.indexOf('PASTE_') === 0) {
+        setDriveLight('red');
+        return false;
+      }
+      try {
+        const base64 = await new Promise((res, rej) => {
+          const r = new FileReader();
+          r.onload = () => res(String(r.result).split(',')[1]);
+          r.onerror = rej;
+          r.readAsDataURL(blob);
+        });
+        // એ જ filename હોય તો Drive માં જૂની ફાઈલ બદલાય (overwrite); નામ બદલાયું હોય તો replaceFilename વાળી જૂની ફાઈલ દૂર
+        await fetch(DRIVE_UPLOAD_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ filename: driveName, data: base64, overwrite: true, replaceFilename: replaceName || '' })
+        });
+        return true;
+      } catch (err) {
+        console.error('Drive upload error:', err);
+        return false;
+      }
+    }
+
+    async function generateReportPDF(includeConsent = true, asBlob = false) {
+      const name = document.getElementById('ptName').value.trim() || 'Patient_Report';
+      if (document.fonts) {
+        try {
+          await Promise.all(['400', '600', '700', '800'].map(w =>
+            document.fonts.load(`${w} 16px "Noto Sans Gujarati"`, 'ગુજરાતી')));
+        } catch (e) {}
+        await document.fonts.ready;
+      }
+
+      const stack = buildPagedReport(includeConsent);
+      stack.querySelectorAll('.pg').forEach((pg, n) => {
+        if (n > 0) pg.style.pageBreakBefore = 'always';
+      });
+
+      const renderContainer = document.createElement('div');
+      renderContainer.style.position = 'fixed';
+      renderContainer.style.left = '-9999px';
+      renderContainer.style.top = '0';
+      renderContainer.style.width = '210mm';
+      renderContainer.style.minWidth = '210mm';
+      renderContainer.style.zoom = '1';
+      renderContainer.style.background = '#ffffff';
+      renderContainer.appendChild(stack);
+      document.body.appendChild(renderContainer);
+
+      const opt = {
+        margin: 0,
+        filename: `${name.replace(/\s+/g, '_')}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, scrollY: 0, scrollX: 0, windowWidth: 1024, windowHeight: 1448 },   // ફોનની સ્ક્રીન પહોળાઈ પર આધાર નહિ (PDF હંમેશા સરખી બને)
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak: { mode: ['css'] }
+      };
+
+      try {
+        const pdfBlob = await html2pdf().set(opt).from(stack).outputPdf('blob');
+        return pdfBlob;   // હવે અહીં ઓટો ડાઉનલોડ/અપલોડ નથી
+      } finally {
+        if (document.body.contains(renderContainer)) document.body.removeChild(renderContainer);
+      }
+    }
+
+    /* ===== Drive sync: માત્ર એક જ વાર અપલોડ; ફેરફાર થાય તો જ એ જ ફાઈલ અપડેટ ===== */
+    const driveSession = { sig: null, name: null, stamp: null, ptId: null, uploading: false };
+
+    function currentSig() {
+      const parts = [];
+      document.querySelectorAll('#labReportForm input, #labReportForm select, #labReportForm textarea').forEach(el => {
+        if (el.id === 'driveUploadChk') return;
+        parts.push((el.id || el.className || el.tagName) + '=' + ((el.type === 'checkbox' || el.type === 'radio') ? (el.checked ? '1' : '0') : el.value));
+      });
+      return parts.join('|');
+    }
+    function refreshDriveLight() {
+      const synced = driveSession.sig !== null && driveSession.sig === currentSig() && !driveSession.uploading;
+      setDriveLight(synced ? 'green' : 'red');
+    }
+    function resetDriveSession() {
+      driveSession.sig = null; driveSession.name = null; driveSession.stamp = null; driveSession.ptId = null;
+    }
+    ['input', 'change'].forEach(ev => document.addEventListener(ev, e => {
+      if (e.target && e.target.closest && e.target.closest('#labReportForm')) refreshDriveLight();
+    }));
+
+    // Drive ટીક હોય અને ડેટા બદલાયો હોય (અથવા હજી અપલોડ ન થયો હોય) તો જ અપલોડ. PDF બનાવીને બેકગ્રાઉન્ડમાં મોકલે છે.
+    async function syncToDrive() {
+      const chk = document.getElementById('driveUploadChk');
+      if (!chk || !chk.checked) return;
+      const sig = currentSig();
+      if (driveSession.sig === sig || driveSession.uploading) { refreshDriveLight(); return; }   // કોઈ ફેરફાર નથી
+
+      const ptIdNow = document.getElementById('ptIdSuffix').value.trim();
+      if (driveSession.name && driveSession.ptId !== ptIdNow) resetDriveSession();   // નવો પેશન્ટ = નવી ફાઈલ
+
+      const base = (document.getElementById('ptName').value.trim() || 'Patient_Report').replace(/\s+/g, '_');
+      if (!driveSession.stamp) {
+        const d = new Date(), z = n => String(n).padStart(2, '0');
+        driveSession.stamp = `${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())}_${z(d.getHours())}${z(d.getMinutes())}${z(d.getSeconds())}`;
+      }
+      const driveName = `${base}_${driveSession.stamp}.pdf`;
+      const replaceName = driveSession.name && driveSession.name !== driveName ? driveSession.name : null;
+
+      driveSession.uploading = true;
+      setDriveLight('red');
+      let blob;
+      try {
+        blob = await generateReportPDF(false, true);   // Drive માં HIV Consent વગરનો રીપોર્ટ
+      } catch (err) {
+        driveSession.uploading = false;
+        console.error(err);
+        setDriveLight('red');
+        return;
+      }
+      // અપલોડ બેકગ્રાઉન્ડમાં, પ્રિન્ટ ને રોકતું નથી
+      uploadPdfToDrive(blob, driveName, replaceName).then(ok => {
+        driveSession.uploading = false;
+        if (ok) { driveSession.sig = sig; driveSession.name = driveName; driveSession.ptId = ptIdNow; }
+        refreshDriveLight();
+      });
+    }
+
+    /* ===== સ્ક્રીન મુજબ રીપોર્ટ ફીટ (ફોન / લેપટોપ) - પ્રિન્ટ/PDF પર અસર નહિ ===== */
+    function fitLayout() {
+      const w = document.querySelector('.main-wrapper');
+      if (!w) return;
+      if (document.documentElement.classList.contains('droid')) { w.style.zoom = ''; return; }   // Android: જૂનું સેટઅપ
+      const vw = document.documentElement.clientWidth || window.innerWidth;
+      const scale = Math.max(0.3, Math.min(1, vw / 830));
+      w.style.zoom = scale;
+    }
+    window.addEventListener('resize', fitLayout);
+    window.addEventListener('orientationchange', () => setTimeout(fitLayout, 200));
+    window.addEventListener('DOMContentLoaded', fitLayout);
+    fitLayout();
+
+    /* ===== Android APK (WebView) માં window.print() કામ કરતું નથી, એટલે PDF બનાવી શેર/સેવ ===== */
+    function isAndroidWebView() {
+      const ua = navigator.userAgent || '';
+      if (!/Android/i.test(ua) || /SamsungBrowser/i.test(ua)) return false;
+      return /; wv\)/.test(ua) || /Version\/[\d.]+.*Chrome\/[\d.]+/.test(ua);
+    }
+    function appToast(msg) {
+      let t = document.getElementById('appToast');
+      if (!t) {
+        t = document.createElement('div');
+        t.id = 'appToast';
+        t.style.cssText = 'position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:99999;padding:10px 16px;border-radius:8px;background:#0f172a;color:#fff;font:14px sans-serif;max-width:90vw;text-align:center;';
+        document.body.appendChild(t);
+      }
+      t.textContent = msg;
+      t.style.display = 'block';
+      clearTimeout(t._h);
+      t._h = setTimeout(() => { t.style.display = 'none'; }, 5000);
+    }
+    async function androidPrintFallback() {
+      const name = document.getElementById('ptName').value.trim() || 'Patient_Report';
+      const fileName = `${name.replace(/\s+/g, '_')}.pdf`;
+      const blob = await generateReportPDF(true, true);
+      const file = new File([blob], fileName, { type: 'application/pdf' });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({ files: [file], title: fileName });
+          return;
+        } catch (err) {
+          if (err && err.name === 'AbortError') return;
+        }
+      }
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = fileName;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 10000);
+      appToast('PDF saved to Downloads. Open it to print.');
+    }
+
+    async function printReport() {
+      const btn = document.getElementById('printReportBtn');
+      const ptName = document.getElementById('ptName').value.trim();
+      document.title = ptName ? ptName.replace(/\s+/g, '_') : 'Report';
+
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Preparing...';
+      }
+
+      try {
+        await syncToDrive();   // ફેરફાર હોય તો જ Drive માં અપલોડ/અપડેટ; ડાઉનલોડ નહિ
+        if (/Android/i.test(navigator.userAgent) && !window.AndroidBridge) {
+          // Android APK: પહેલાંની જેમ PDF બનાવીને સેવ (આથી જ ફોનમાં પ્રિન્ટ પ્લગઇન ખુલતું હતું), પછી પ્રિન્ટ
+          const nm = (document.getElementById('ptName').value.trim() || 'Patient_Report').replace(/\s+/g, '_') + '.pdf';
+          try {
+            const blob = await generateReportPDF(true, true);
+            appToast('Step 1/3: PDF created (' + Math.round(blob.size / 1024) + ' KB)');
+            const dlUrl = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = dlUrl; a.download = nm;
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
+            setTimeout(() => URL.revokeObjectURL(dlUrl), 10000);
+          } catch (e) {
+            console.error('PDF save step failed, printing anyway', e);
+            appToast('PDF step failed: ' + (e && e.message ? e.message : e));
+          }
+        }
+        setTimeout(() => {
+          try {
+            window.print();
+            if (/Android/i.test(navigator.userAgent)) appToast('Step 3/3: print requested');
+          } catch (e) {
+            appToast('Print error: ' + (e && e.message ? e.message : e));
+          }
+        }, 600);
+      } catch (err) {
+        console.error('Print Error:', err);
+        alert('Could not prepare the print. Please try again.');
+      } finally {
+        if (btn) {
+          setTimeout(() => {
+            btn.disabled = false;
+            btn.textContent = 'Print Report';
+          }, 500);
+        }
+      }
+    }
+
+    // Save PDF: ક્યાં સેવ કરવી તે પૂછે છે (જ્યાં બ્રાઉઝર/WebView સપોર્ટ કરે ત્યાં)
+    async function saveDirectPDF() {
+      const name = document.getElementById('ptName').value.trim() || 'Patient_Report';
+      const fileName = `${name.replace(/\s+/g, '_')}.pdf`;
+      let handle = null;
+      try {
+        if (window.showSaveFilePicker) {
+          // પીકર PDF બનાવતા પહેલાં જ ખોલવો પડે (user click માન્ય રહે એ માટે)
+          handle = await window.showSaveFilePicker({
+            suggestedName: fileName,
+            types: [{ description: 'PDF', accept: { 'application/pdf': ['.pdf'] } }]
+          });
+        }
+      } catch (err) {
+        if (err && err.name === 'AbortError') return;   // યુઝરે Cancel કર્યું
+        console.error('Save picker error:', err);
+        handle = null;
+      }
+
+      try {
+        const blob = await generateReportPDF(true, true);
+        if (handle) {
+          const w = await handle.createWritable();
+          await w.write(blob);
+          await w.close();
+        } else {
+          // જ્યાં લોકેશન પીકર સપોર્ટેડ નથી ત્યાં સામાન્ય ડાઉનલોડ
+          const dlUrl = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = dlUrl;
+          a.download = fileName;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          setTimeout(() => URL.revokeObjectURL(dlUrl), 10000);
+        }
+        await syncToDrive();
+      } catch (err) {
+        console.error('PDF Save Error:', err);
+        alert('Could not save the PDF. Please try again.');
+      }
+    }
+
+    function validateResultRange(input, index) {
+      const test = testData[index];
+      if (!test || !test.type || test.type === "none" || test.type === "header_only") return;
+      const valText = input.value.trim();
+      if (!valText) {
+        input.classList.remove('abnormal-val');
+        return;
+      }
+      let isAbnormal = false;
+      if (test.type === "time_range") {
+        const numbers = valText.match(/\d+(?:\.\d+)?/g);
+        if (numbers && numbers.length > 0) {
+          const num = parseFloat(numbers[0]);
+          if (num < test.min || num > test.max) isAbnormal = true;
+        }
+      } else if (test.type === "range") {
+        const matchRange = valText.match(/(\d+(?:\.\d+)?)\s*-\s*(\d+(?:\.\d+)?)/);
+        if (matchRange) {
+          const valMin = parseFloat(matchRange[1]);
+          const valMax = parseFloat(matchRange[2]);
+          if (valMin < test.min || valMax > test.max) isAbnormal = true;
+        } else {
+          const cleanVal = valText.replace(/,/g, '');
+          const num = parseFloat(cleanVal);
+          if (!isNaN(num) && (num < test.min || num > test.max)) isAbnormal = true;
+        }
+      } else if (test.type === "smart_unit" || test.type === "qualitative") {
+        const valLower = valText.toLowerCase();
+        const normLower = (test.normalVal || 'nil').toLowerCase();
+        if (normLower === 'nil' || normLower === 'absent') {
+          if (!valLower.includes('nil') && !valLower.includes('absent') && !valLower.includes('negative')) isAbnormal = true;
+        } else if (normLower === 'non-reactive') {
+          if (!valLower.includes('non-reactive') && !valLower.includes('non reactive')) isAbnormal = true;
+        } else if (normLower === 'negative') {
+          if (!valLower.includes('negative') && !valLower.includes('not seen')) isAbnormal = true;
+        } else if (normLower === 'clear') {
+          if (!valLower.includes('clear') && !valLower.includes('transparent')) isAbnormal = true;
+        }
+      }
+      if (isAbnormal) input.classList.add('abnormal-val');
+      else input.classList.remove('abnormal-val');
+    }
+
+    tbody.addEventListener('input', (e) => {
+      if (e.target.classList.contains('result-input')) {
+        const index = parseInt(e.target.getAttribute('data-index'), 10);
+        const value = e.target.value.trim().toLowerCase();
+        const test = testData[index];
+
+        if (value === 'n' && test.id !== 'pbf') {
+          if (test.key === 'hiv') e.target.value = 'Non-Reactive';
+          else if (test.key === 'urineSugar' || test.key === 'urineAlbumin' || (test.normalVal && test.normalVal === 'nil')) e.target.value = 'Nil';
+          else if (test.normalVal && test.normalVal === 'absent') e.target.value = 'Absent';
+          else if (test.normalVal && test.normalVal === 'clear') e.target.value = 'Clear';
+          else if (test.id === 'stool_ova_cyst') e.target.value = 'Not Seen';
+          else e.target.value = 'Negative';
+        }
+
+        autoResizeTextarea(e.target);
+        autoFitInputText(e.target);
+        validateResultRange(e.target, index);
+        checkHivConsentAutoAttach();
+      }
+    });
+
+    tbody.addEventListener('focusout', (e) => {
+      if (e.target.classList.contains('result-input')) {
+        const index = parseInt(e.target.getAttribute('data-index'), 10);
+        const test = testData[index];
+        if (!test) return;
+        let val = e.target.value.trim();
+        if (test.unit && val.length > 0) {
+          const isNilValue = /^(nil|absent|negative|not seen|n\/a)$/i.test(val);
+          if (!isNilValue && !val.toLowerCase().includes(test.unit.trim().toLowerCase()) && /\d/.test(val)) {
+            e.target.value = val + test.unit;
+          }
+        }
+        autoResizeTextarea(e.target);
+        autoFitInputText(e.target);
+        validateResultRange(e.target, index);
+      }
+    });
+
+    tbody.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey && e.target.classList.contains('result-input')) {
+        e.preventDefault();
+        e.target.blur();
+        const currentIndex = parseInt(e.target.getAttribute('data-index'), 10);
+        let nextIndex = currentIndex + 1;
+        while (nextIndex < testData.length) {
+          const row = tbody.children[nextIndex];
+          if (row && !row.classList.contains('hide-row') && !testData[nextIndex].category && testData[nextIndex].type !== 'header_only') break;
+          nextIndex++;
+        }
+        const nextInput = document.querySelector(`.result-input[data-index="${nextIndex}"]`);
+        if (nextInput) nextInput.focus();
+      }
+    });
+
+    function setCurrentDateTime() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+      const formattedDate = `${day}-${month}-${year}`;
+      document.getElementById('regDate').value = formattedDate;
+      document.getElementById('hivConsentDate').textContent = formattedDate;
+
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      document.getElementById('regTime').value = `${hours}:${minutes}`;
+    }
+
+    let pendingWaShare = null;
+
+    function waButton() { return document.querySelector('.btn-whatsapp'); }
+    function resetWaButton() {
+      const b = waButton();
+      if (b) { b.disabled = false; b.textContent = 'Send to WhatsApp'; b.onclick = sendWhatsApp; }
+      pendingWaShare = null;
+    }
+
+    async function shareWaFile(shareData) {
+      await navigator.share(shareData);
+    }
+
+    async function sendWhatsApp() {
+      const btn = waButton();
+      const rawContact = document.getElementById('ptContact').value.trim();
+      let phone = rawContact.replace(/\D/g, '');
+      if (phone.length === 10) phone = '91' + phone;
+
+      const name = document.getElementById('ptName').value.trim() || 'Patient';
+      const ptId = 'GU/PRSN/' + (document.getElementById('ptIdSuffix').value.trim() || 'Report');
+      const regDate = document.getElementById('regDate').value || '';
+      const message = `Hello *${name}*,\n\nYour Laboratory Test Report from *PHC Pransli (Mukhyamantri Nidan Yojana)* is ready.\n\n*Pt. ID:* ${ptId}\n*Date:* ${regDate}`;
+      const fileName = `${name.replace(/\s+/g, '_')}.pdf`;
+
+      if (btn) { btn.disabled = true; btn.textContent = 'Preparing PDF...'; }
+
+      try {
+        // PDF without HIV consent page, kept in memory so it can be attached directly
+        const blob = await generateReportPDF(false, true);
+        const file = new File([blob], fileName, { type: 'application/pdf' });
+        // Android APK: PDF (HIV consent vagar) sidhi WhatsApp ma attach thai jashe - koi text nahi
+        if (window.AndroidBridge && window.AndroidBridge.shareWhatsApp) {
+          const b64 = await new Promise((res, rej) => {
+            const r = new FileReader();
+            r.onload = () => res(String(r.result).split(',')[1]);
+            r.onerror = () => rej(new Error('read failed'));
+            r.readAsDataURL(blob);
+          });
+          window.AndroidBridge.shareWhatsApp(b64, fileName, phone || '');
+          resetWaButton();
+          return;
+        }
+        const shareData = { files: [file], title: 'Lab Report', text: message };
+
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          try {
+            await shareWaFile(shareData);   // opens share sheet -> choose WhatsApp -> PDF is attached
+            resetWaButton();
+            return;
+          } catch (err) {
+            if (err && err.name === 'AbortError') { resetWaButton(); return; }
+            if (err && err.name === 'NotAllowedError') {
+              // PDF took too long, browser needs a fresh tap: share instantly on next tap
+              pendingWaShare = shareData;
+              if (btn) {
+                btn.disabled = false;
+                btn.textContent = 'Tap to Share PDF';
+                btn.onclick = async () => {
+                  try { await shareWaFile(pendingWaShare); } catch (e) { /* cancelled */ }
+                  resetWaButton();
+                };
+              }
+              return;
+            }
+            console.error('Share failed:', err);
+          }
+        }
+
+        // Fallback (browser cannot attach files): save PDF, then open WhatsApp chat
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = fileName;
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 10000);
+
+        if (!phone) {
+          alert('The PDF has been saved. To send it on WhatsApp, enter the Contact Number in Patient Details, or attach the PDF manually.');
+        } else {
+          window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
+          alert('This browser cannot attach the PDF automatically. The PDF has been downloaded; attach it in WhatsApp using the 📎 button.');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Could not create the PDF. Please try again.');
+      } finally {
+        if (!pendingWaShare) resetWaButton();
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      if (document.fonts && document.fonts.load) {
+        ['400', '600', '700', '800'].forEach(w =>
+          document.fonts.load(`${w} 16px "Noto Sans Gujarati"`, 'ગુજરાતી').catch(() => {}));
+      }
+      setCurrentDateTime();
+      const sugarSelect = document.getElementById('bloodSugarType');
+      if (sugarSelect) adjustSugarSelectWidth(sugarSelect);
+      const ptTypeSelect = document.getElementById('ptType');
+      if (ptTypeSelect) adjustPtTypeSelectWidth(ptTypeSelect);
+      const hivPid = document.getElementById('hivPidInput');
+      if (hivPid) adjustHivPidWidth(hivPid);
+      applyPtTypeFilter();
+    });
+
+    function resetForm() {
+      const resettables = document.querySelectorAll('.resettable');
+      resettables.forEach(input => {
+        input.value = '';
+        input.classList.remove('abnormal-val');
+        input.style.fontSize = '13px';
+        if (input.tagName === 'TEXTAREA') input.style.height = '20px';
+      });
+
+      const driveChkR = document.getElementById('driveUploadChk');
+      if (driveChkR) driveChkR.checked = false;
+      resetDriveSession();
+      setDriveLight('red');
+      setTimeout(autoSizeAgeSex, 0);
+
+      const selectables = document.querySelectorAll('.resettable-select');
+      selectables.reset = selectables.forEach(select => { select.selectedIndex = 0; });
+
+      isUrineExpanded = false;
+      const uBtn = document.getElementById('urineToggleBtn');
+      if (uBtn) uBtn.classList.add('collapsed');
+
+      isDengueExpanded = false;
+      const dBtn = document.getElementById('dengueToggleBtn');
+      if (dBtn) dBtn.classList.add('collapsed');
+
+      isKidneyExpanded = false;
+      const kBtn = document.getElementById('kidneyToggleBtn');
+      if (kBtn) kBtn.classList.add('collapsed');
+
+      isLipidExpanded = false;
+      const lBtn = document.getElementById('lipidToggleBtn');
+      if (lBtn) lBtn.classList.add('collapsed');
+
+      isLftExpanded = false;
+      const lftBtn = document.getElementById('lftToggleBtn');
+      if (lftBtn) lftBtn.classList.add('collapsed');
+
+      isAlcExpanded = false;
+      const alcBtn = document.getElementById('alcToggleBtn');
+      if (alcBtn) alcBtn.classList.add('collapsed');
+
+      isTlcExpanded = false;
+      const tlcBtn = document.getElementById('tlcToggleBtn');
+      if (tlcBtn) tlcBtn.classList.add('collapsed');
+
+      isRbcExpanded = false;
+      const rbcBtn = document.getElementById('rbcToggleBtn');
+      if (rbcBtn) rbcBtn.classList.add('collapsed');
+
+      handlePtTypeChange(document.getElementById('ptType'));
+
+      const sugarSelect = document.getElementById('bloodSugarType');
+      if (sugarSelect) adjustSugarSelectWidth(sugarSelect);
+
+      const hivPid = document.getElementById('hivPidInput');
+      if (hivPid) {
+        hivPid.value = '';
+        adjustHivPidWidth(hivPid);
+      }
+
+      restoreAllRowsAfterPrint();
+      checkHivConsentAutoAttach();
+
+      document.title = "Lab Report - PHC Pransli";
+      setCurrentDateTime();
+    }
+
+    function runCredit() {
+      const D = 2800, t0 = performance.now();
+      const blood = document.getElementById('synBlood'), shine = document.getElementById('synShine'),
+            plunger = document.getElementById('synPlunger'), pct = document.getElementById('creditPct');
+      function step(now) {
+        const p = Math.min(1, (now - t0) / D), e = p < .5 ? 2*p*p : 1 - Math.pow(-2*p + 2, 2) / 2;
+        const w = 150 * e;
+        if (blood) blood.setAttribute('width', w);
+        if (shine) shine.setAttribute('width', Math.max(0, w - 4));
+        if (plunger) plunger.setAttribute('transform', 'translate(' + w + ' 0)');
+        if (pct) pct.textContent = Math.max(1, Math.round(p * 100));
+        if (p < 1) requestAnimationFrame(step); else setTimeout(endCredit, 450);
+      }
+      requestAnimationFrame(step);
+    }
+    let creditDone = false;
+    function endCredit() {
+      if (creditDone) return;
+      creditDone = true;
+      const c = document.getElementById('creditSplash');
+      if (c) { c.classList.add('hide'); setTimeout(() => c.remove(), 650); }
+    }
+    /* ===== Native Android app bridge (GitHub-built APK): સીધું પ્રિન્ટ + PDF Downloads માં સેવ ===== */
+    (function () {
+      if (!window.AndroidBridge) return;
+      const blobs = {};
+      const origCreate = URL.createObjectURL.bind(URL);
+      URL.createObjectURL = function (b) { const u = origCreate(b); blobs[u] = b; return u; };
+      const origClick = HTMLAnchorElement.prototype.click;
+      HTMLAnchorElement.prototype.click = function () {
+        if (this.download && blobs[this.href]) {
+          const b = blobs[this.href], n = this.download;
+          const r = new FileReader();
+          r.onload = () => window.AndroidBridge.savePdf(String(r.result).split(',')[1], n);
+          r.readAsDataURL(b);
+          return;
+        }
+        return origClick.call(this);
+      };
+      window.print = function () {
+        preparePrintPages();
+        setTimeout(() => window.AndroidBridge.print(), 400);
+        setTimeout(clearPrintPages, 180000);
+      };
+    })();
+
+    /* splash ab splash.html ma chhe */
+  </script>
+</body>
+</html>
