@@ -127,6 +127,10 @@ public class MainActivity extends Activity {
                         i.setClipData(ClipData.newRawUri("Lab Report", uri));
                         i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                         i.setPackage(pkg);
+                        // Contact number hoy to e j number ni chat ma PDF attach thai ne khule
+                        if (phone != null && !phone.isEmpty()) {
+                            i.putExtra("jid", phone + "@s.whatsapp.net");
+                        }
                         startActivity(i);
                         started = true;
                         break;
