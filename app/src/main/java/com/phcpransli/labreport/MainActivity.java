@@ -7,7 +7,10 @@ import android.content.ClipData;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.net.Uri;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.Environment;
 import android.print.PrintAttributes;
 import android.print.PrintDocumentAdapter;
@@ -133,6 +136,19 @@ public class MainActivity extends Activity {
                         }
                         startActivity(i);
                         started = true;
+
+                        // WhatsApp thodi vaar thi vapryu na hoy (cold start) to pehli vaar file attach thati nathi.
+                        // Tyare 2.5 sec pachhi te j share fari moklvu (jate "back jai ne fari send" karva jevu).
+                        SharedPreferences sp = getSharedPreferences("wa", MODE_PRIVATE);
+                        long last = sp.getLong("lastShare", 0);
+                        long nowMs = System.currentTimeMillis();
+                        sp.edit().putLong("lastShare", nowMs).apply();
+                        if (nowMs - last > 20 * 60 * 1000L) {
+                            final Intent again = new Intent(i);
+                            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                                try { startActivity(again); } catch (Exception ignored) { }
+                            }, 2500);
+                        }
                         break;
                     } catch (ActivityNotFoundException ignored) { }
                 }
